@@ -1,24 +1,43 @@
-:root { --bg: #f6f5f2; --ink: #1f2328; --mute: #6b7280; --card: #fff; --line: #e5e3de; }
-@media (prefers-color-scheme: dark) { :root { --bg: #16171a; --ink: #ecedef; --mute: #9aa0a8; --card: #1f2125; --line: #30333a; } }
+/* Tasarım: siyah-beyaz, sade, cam görünüm. Tüm uygulamalar aynı değişkenleri kullanır. */
+:root {
+  --bg: #f2f2f2; --ink: #0a0a0a; --mute: #6e6e6e; --line: rgba(0,0,0,.08);
+  --glass: rgba(255,255,255,.55); --glass-edge: rgba(255,255,255,.85); --shadow: 0 8px 28px rgba(0,0,0,.07);
+  --solid: #0a0a0a; --solid-ink: #fff;
+  --halo-a: #ffffff; --halo-b: #d9d9d9;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0a0a0a; --ink: #f4f4f4; --mute: #8f8f8f; --line: rgba(255,255,255,.1);
+    --glass: rgba(255,255,255,.06); --glass-edge: rgba(255,255,255,.14); --shadow: 0 8px 28px rgba(0,0,0,.5);
+    --solid: #f4f4f4; --solid-ink: #0a0a0a;
+    --halo-a: #262626; --halo-b: #0a0a0a;
+  }
+}
 * { box-sizing: border-box; }
 html, body { margin: 0; min-height: 100%; }
-body { font: 16px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--ink);
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
-main { max-width: 640px; margin: 0 auto; padding: 36px 20px 40px; }
-header { margin-bottom: 28px; }
-h1 { margin: 0; font-size: 1.9rem; letter-spacing: -0.02em; }
+body {
+  font: 16px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: var(--ink);
+  background: radial-gradient(60% 50% at 15% 0%, var(--halo-a), transparent 70%),
+              radial-gradient(60% 60% at 100% 100%, var(--halo-b), transparent 70%), var(--bg);
+  background-attachment: fixed;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+.glass {
+  background: var(--glass); border: 1px solid var(--glass-edge); box-shadow: var(--shadow);
+  -webkit-backdrop-filter: blur(18px) saturate(1.1); backdrop-filter: blur(18px) saturate(1.1);
+}
+main { max-width: 640px; margin: 0 auto; padding: 40px 20px 40px; }
+header { margin-bottom: 32px; }
+h1 { margin: 0; font-size: 1.9rem; font-weight: 600; letter-spacing: -0.03em; }
 #today { margin: 4px 0 0; color: var(--mute); }
 .hidden { display: none !important; }
 
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 24px 10px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 26px 10px; }
 .app { display: flex; flex-direction: column; align-items: center; text-align: center; text-decoration: none; color: inherit;
   -webkit-tap-highlight-color: transparent; }
-.icon { width: 68px; height: 68px; border-radius: 18px; display: grid; place-items: center; font-size: 34px;
-  box-shadow: 0 4px 12px rgba(0,0,0,.14); transition: transform .12s; }
+.icon { width: 66px; height: 66px; border-radius: 18px; display: grid; place-items: center; color: var(--ink); transition: transform .12s; }
 .app:hover .icon { transform: translateY(-2px); }
-.app:active .icon { transform: scale(.92); }
-.label { margin-top: 8px; font-size: 0.88rem; font-weight: 600; line-height: 1.2; }
-.desc { display: none; }
+.app:active .icon { transform: scale(.93); }
+.label { margin-top: 8px; font-size: 0.82rem; font-weight: 500; line-height: 1.2; }
 
-.install { margin-top: 44px; padding: 12px 14px; border-radius: 12px; background: var(--card); border: 1px solid var(--line);
-  color: var(--mute); font-size: 0.88rem; }
+.install { margin-top: 48px; padding: 12px 14px; border-radius: 14px; color: var(--mute); font-size: 0.86rem; }

@@ -1,4 +1,5 @@
 import { APPS } from "./apps.js";
+import { icon } from "./icons.js";
 
 const grid = document.getElementById("grid");
 for (const a of APPS) {
@@ -6,17 +7,13 @@ for (const a of APPS) {
   el.className = "app";
   el.href = a.url;
   el.title = a.desc || a.name;
-  const icon = document.createElement("span");
-  icon.className = "icon";
-  icon.style.background = `linear-gradient(160deg, ${a.colors[0]}, ${a.colors[1]})`;
-  icon.textContent = a.emoji;
+  const tile = document.createElement("span");
+  tile.className = "icon glass";
+  tile.innerHTML = icon(a.icon, 30);
   const label = document.createElement("span");
   label.className = "label";
   label.textContent = a.name;
-  const desc = document.createElement("span");
-  desc.className = "desc";
-  desc.textContent = a.desc || "";
-  el.append(icon, label, desc);
+  el.append(tile, label);
   grid.append(el);
 }
 
@@ -28,7 +25,7 @@ if (!standalone) {
   const tip = document.getElementById("install-tip");
   const ios = /iPhone|iPad|iPod/.test(navigator.userAgent);
   const android = /Android/.test(navigator.userAgent);
-  if (ios) tip.textContent = "Telefonda uygulama gibi açmak için: Paylaş düğmesi → “Ana Ekrana Ekle”.";
-  else if (android) tip.textContent = "Telefonda uygulama gibi açmak için: sağ üstteki ⋮ menü → “Ana ekrana ekle”.";
+  if (ios) tip.textContent = "Uygulama gibi açmak için: Paylaş → “Ana Ekrana Ekle”.";
+  else if (android) tip.textContent = "Uygulama gibi açmak için: ⋮ menü → “Ana ekrana ekle”.";
   if (tip.textContent) tip.classList.remove("hidden");
 }
