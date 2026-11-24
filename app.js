@@ -18,14 +18,3 @@ for (const a of APPS) {
 }
 
 document.getElementById("today").textContent = new Date().toLocaleDateString("tr-TR", { weekday: "long", day: "numeric", month: "long" });
-
-// Ana ekrana ekleme ipucu (yalnızca tarayıcıda açıkken)
-const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone;
-if (!standalone) {
-  const tip = document.getElementById("install-tip");
-  const ios = /iPhone|iPad|iPod/.test(navigator.userAgent);
-  const android = /Android/.test(navigator.userAgent);
-  if (ios) tip.textContent = "Uygulama gibi açmak için: Paylaş → “Ana Ekrana Ekle”.";
-  else if (android) tip.textContent = "Uygulama gibi açmak için: ⋮ menü → “Ana ekrana ekle”.";
-  if (tip.textContent) tip.classList.remove("hidden");
-}

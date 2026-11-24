@@ -1,16 +1,16 @@
 /* Tasarım: siyah-beyaz, sade, cam görünüm. Tüm uygulamalar aynı değişkenleri kullanır. */
 :root {
-  --bg: #f2f2f2; --ink: #0a0a0a; --mute: #6e6e6e; --line: rgba(0,0,0,.08);
-  --glass: rgba(255,255,255,.55); --glass-edge: rgba(255,255,255,.85); --shadow: 0 8px 28px rgba(0,0,0,.07);
-  --solid: #0a0a0a; --solid-ink: #fff;
-  --halo-a: #ffffff; --halo-b: #d9d9d9;
+  --bg: #efede8; --ink: #2e3033; --mute: #75736e; --line: rgba(0,0,0,.08);
+  --glass: rgba(250,249,246,.55); --glass-edge: rgba(250,249,246,.85); --shadow: 0 8px 28px rgba(0,0,0,.07);
+  --solid: #2e3033; --solid-ink: #faf9f6;
+  --halo-a: #faf9f6; --halo-b: #dcd9d3;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0a0a0a; --ink: #f4f4f4; --mute: #8f8f8f; --line: rgba(255,255,255,.1);
+    --bg: #1f2022; --ink: #ecebe7; --mute: #9b9993; --line: rgba(255,255,255,.1);
     --glass: rgba(255,255,255,.06); --glass-edge: rgba(255,255,255,.14); --shadow: 0 8px 28px rgba(0,0,0,.5);
-    --solid: #f4f4f4; --solid-ink: #0a0a0a;
-    --halo-a: #262626; --halo-b: #0a0a0a;
+    --solid: #ecebe7; --solid-ink: #2a2c2f;
+    --halo-a: #36383b; --halo-b: #1f2022;
   }
 }
 * { box-sizing: border-box; }
@@ -40,4 +40,3 @@ h1 { margin: 0; font-size: 1.9rem; font-weight: 600; letter-spacing: -0.03em; }
 .app:active .icon { transform: scale(.93); }
 .label { margin-top: 8px; font-size: 0.82rem; font-weight: 500; line-height: 1.2; }
 
-.install { margin-top: 48px; padding: 12px 14px; border-radius: 14px; color: var(--mute); font-size: 0.86rem; }
