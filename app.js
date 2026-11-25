@@ -1,5 +1,5 @@
-import { APPS } from "./apps.js?v=20261125b";
-import { icon } from "./icons.js?v=20261125b";
+import { APPS } from "./apps.js?v=20261125c";
+import { icon } from "./icons.js?v=20261125c";
 
 const grid = document.getElementById("grid");
 for (const a of APPS) {
