@@ -12,6 +12,6 @@ Bu hesaptaki bütün uygulamalar (ana menü dogukaska.github.io dahil) aynı gö
 - Renk değişkenleri `dogukaska.github.io/style.css` içindekiyle aynı: `--bg --ink --mute --glass --glass-edge --shadow --solid --solid-ink`.
 - Arayüz dili Türkçe. Kullanıcı İngilizce bilmiyor; metinler kısa ve sade.
 - Her uygulamanın üstünde ana menüye dönen "Uygulamalar" bağlantısı (`href="/"`) olur.
-- Yeni uygulama yapılınca `dogukaska.github.io/apps.js` listesine eklenir (simgesi `icons.js` içine).
+- Yeni uygulama yapılınca `dogukaska.github.io/apps.js` listesine eklenir (simgesi `icons.js` içine). `app.js` içindeki `apps.js?v=` / `icons.js?v=` ve `index.html` sürüm numaralarını da artır.
 - Her şey tarayıcıda çalışır, dosyalar hiçbir sunucuya yüklenmez. Kütüphaneler `vendor/` içinde tutulur.
 - **Önbellek:** `index.html` içindeki `style.css`, `theme.js`, `app.js` bağlantılarında `?v=…` sürüm numarası var. Bu dosyalardan biri değişince sürüm numarasını artır; yoksa telefonlar eski dosyayı kullanır.
