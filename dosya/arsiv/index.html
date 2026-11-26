@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Arşiv Açıcı · Dijital Çakı</title>
+<meta name="description" content="ZIP, RAR veya 7z arşivinden istediğin dosyayı çıkar.">
+<link rel="icon" href="/icons/dijital-caki.svg">
+<link rel="stylesheet" href="/tool.css?v=20261126d">
+<link rel="stylesheet" href="/gunluk/style.css?v=1">
+<script src="/theme.js?v=20261126c"></script>
+<script type="module" src="app.js?v=1"></script>
+</head>
+<body>
+<main class="tool daily">
+<header>
+  <a class="back" href="/#dosya">Uygulamalar</a>
+  <h1>Arşiv Açıcı</h1>
+  <p class="intro">ZIP, RAR veya 7z arşivinden istediğin dosyayı çıkar.</p>
+</header>
+<section class="panel">
+  <label for="archive-file">Arşiv seç</label>
+  <input id="archive-file" type="file" accept=".zip,.rar,.7z,.tar,.gz,.tgz">
+  <details><summary>Arşiv parolası</summary>
+    <label for="password">Parola (gerekiyorsa)</label><input id="password" type="password" autocomplete="off">
+    <button type="button" id="reopen">Parolayla tekrar aç</button>
+  </details>
+  <p id="status" role="status"></p>
+</section>
+<section class="panel" id="entries" hidden>
+  <h2>İçindekiler</h2>
+  <ul id="files" class="clean scroll"></ul>
+</section>
+<p class="muted">Arşiv ve parola bu cihazda işlenir. Büyük arşivler cihaz belleğine bağlıdır.</p>
+</main>
+</body>
+</html>
