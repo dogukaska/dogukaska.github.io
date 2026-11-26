@@ -16,9 +16,10 @@
 <meta name="apple-mobile-web-app-title" content="Dijital Çakı">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <script src="/theme.js?v=20261126c"></script>
-<link rel="stylesheet" href="/style.css?v=20261126d">
-<script type="module" src="/app.js?v=20261126d"></script>
+<link rel="stylesheet" href="/style.css?v=20261126e">
+<script type="module" src="/app.js?v=20261126e"></script>
 <script type="module" src="/catalog-search.js?v=20261126c"></script>
+<script type="module" src="/market-rates.js?v=1"></script>
 </head>
 <body class="catalog-page">
 <main>
@@ -30,6 +31,27 @@
     <label for="tool-search">Araç ara</label>
     <input id="tool-search" type="search" placeholder="Örn. PDF, fotoğraf, barkod" autocomplete="off">
   </div>
+  <section class="market-rates glass" aria-labelledby="rates-title">
+    <h2 id="rates-title">Altın ve Dolar/TL</h2>
+    <table aria-labelledby="rates-title">
+      <thead><tr><td></td><th scope="col">Alış</th><th scope="col">Satış</th></tr></thead>
+      <tbody>
+        <tr data-rate="XAU_GRAM">
+          <th scope="row">Gram Altın <time hidden></time><small class="rate-note" role="status" hidden></small></th>
+          <td data-price="buy">—</td><td data-price="sell">—</td>
+        </tr>
+        <tr data-rate="USD">
+          <th scope="row">Dolar/TL <time hidden></time><small class="rate-note" role="status" hidden></small></th>
+          <td data-price="buy">—</td><td data-price="sell">—</td>
+        </tr>
+      </tbody>
+    </table>
+    <p id="rates-status" role="status">Fiyatlar yükleniyor…</p>
+    <div class="rates-footer">
+      <a href="https://turkishlirarates.com/">Kaynak: TurkishLiraRates</a>
+      <span>Görünürken yaklaşık 60 sn’de bir kontrol</span>
+    </div>
+  </section>
   <p id="no-tools" role="status" hidden>Aramana uygun araç bulunamadı.</p>
   <nav id="grid" class="grid" aria-label="Araçlar"></nav>
 </main>
