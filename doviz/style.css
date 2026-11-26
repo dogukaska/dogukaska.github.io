@@ -1,0 +1,23 @@
+.tool.currency-tool { max-width: 560px; }
+.market-rates { padding: 10px 12px; border-radius: 10px; }
+.market-rates h2 { margin: 0 0 4px; font-size: .875rem; font-weight: 650; }
+.market-rates table { width: 100%; border-collapse: collapse; font-size: .875rem; font-variant-numeric: tabular-nums; }
+.market-rates th, .market-rates td { padding: 4px 0 4px 6px; text-align: right; vertical-align: top; }
+.market-rates tr > :first-child { padding-left: 0; text-align: left; }
+.market-rates tbody tr { border-top: 1px solid var(--line); }
+.market-rates tbody th { font-weight: 620; }
+.market-rates thead, .market-rates time, .rate-note, #rates-status, .rates-footer { color: var(--mute); font-size: .75rem; font-weight: 450; }
+.market-rates time:not([hidden]), .rate-note:not([hidden]) { display: block; }
+.market-rates td[data-price] { white-space: nowrap; }
+#rates-status { margin: 3px 0 0; }
+.rates-footer { display: flex; flex-wrap: wrap; gap: 3px 12px; margin-top: 6px; }
+.rates-footer a { color: inherit; text-underline-offset: 2px; }
+.rates-footer a:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.rate-converter { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line); }
+.converter-fields, .converter-results { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 6px; }
+.converter-fields label, .converter-results span { color: var(--mute); font-size: .75rem; }
+.tool .converter-fields input, .tool .converter-fields select {
+  min-width: 0; min-height: 36px; margin-top: 2px; font-size: 1rem;
+}
+.converter-results output { display: block; font-size: .875rem; font-weight: 620; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+#converter-note { margin: 4px 0 0; }

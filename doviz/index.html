@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Döviz ve Altın Çevirici · Dijital Çakı</title>
+<meta name="description" content="Gram altın, dolar, euro ve sterlin kurlarını gör ve TL karşılığını hesapla.">
+<meta name="theme-color" content="#efede8">
+<link rel="icon" href="/icons/dijital-caki.svg">
+<link rel="stylesheet" href="/tool.css?v=20261126d">
+<link rel="stylesheet" href="style.css?v=1">
+<script src="/theme.js?v=20261126c"></script>
+<script type="module" src="app.js?v=1"></script>
+</head>
+<body>
+<main class="tool currency-tool">
+  <header>
+    <a class="back" href="/#takip">Uygulamalar</a>
+    <h1>Döviz ve Altın Çevirici</h1>
+  </header>
+  <section class="market-rates glass" aria-labelledby="rates-title">
+    <h2 id="rates-title">Altın ve döviz kurları</h2>
+    <table aria-labelledby="rates-title">
+      <thead><tr><td></td><th scope="col">Alış</th><th scope="col">Satış</th></tr></thead>
+      <tbody>
+        <tr data-rate="XAU_GRAM">
+          <th scope="row">Gram Altın <time hidden></time><small class="rate-note" role="status" hidden></small></th>
+          <td data-price="buy">—</td><td data-price="sell">—</td>
+        </tr>
+        <tr data-rate="USD">
+          <th scope="row">Dolar/TL <time hidden></time><small class="rate-note" role="status" hidden></small></th>
+          <td data-price="buy">—</td><td data-price="sell">—</td>
+        </tr>
+        <tr data-rate="EUR">
+          <th scope="row">Euro/TL <time hidden></time><small class="rate-note" role="status" hidden></small></th>
+          <td data-price="buy">—</td><td data-price="sell">—</td>
+        </tr>
+        <tr data-rate="GBP">
+          <th scope="row">Sterlin/TL <time hidden></time><small class="rate-note" role="status" hidden></small></th>
+          <td data-price="buy">—</td><td data-price="sell">—</td>
+        </tr>
+      </tbody>
+    </table>
+    <p id="rates-status" role="status">Fiyatlar yükleniyor…</p>
+    <div class="rate-converter">
+      <h2>TL karşılığını hesapla</h2>
+      <div class="converter-fields">
+        <label>Miktar <input id="rate-amount" type="text" inputmode="decimal" value="1" maxlength="16"></label>
+        <label>Altın veya döviz
+          <select id="rate-unit">
+            <option value="XAU_GRAM">Gram Altın</option>
+            <option value="USD">ABD Doları</option>
+            <option value="EUR">Euro</option>
+            <option value="GBP">Sterlin</option>
+          </select>
+        </label>
+      </div>
+      <div class="converter-results" aria-live="polite" aria-atomic="true">
+        <div><span>Alırken ödersin</span><output id="rate-cost" for="rate-amount rate-unit" aria-live="off">—</output></div>
+        <div><span>Satarken alırsın</span><output id="rate-value" for="rate-amount rate-unit" aria-live="off">—</output></div>
+      </div>
+      <p id="converter-note" class="rate-note" role="status" hidden></p>
+    </div>
+    <div class="rates-footer">
+      <a href="https://turkishlirarates.com/">Kaynak: TurkishLiraRates</a>
+      <span>Görünürken yaklaşık 60 sn’de bir kontrol</span>
+    </div>
+  </section>
+</main>
+</body>
+</html>
