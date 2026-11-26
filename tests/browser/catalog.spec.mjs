@@ -13,8 +13,6 @@ test("katalog ve uygulama girişleri dar ekranda açılır", async ({ page, base
   const links = page.locator(".tool-list .app");
   await expect(links.first()).toBeVisible();
   const routes = await links.evaluateAll((all) => all.map((item) => item.getAttribute("href")));
-  await page.locator("#tool-search").fill("MOV");
-  await expect(page.getByRole("link", { name: /Sesi Yazıya Çevir/ })).toBeVisible();
 
   const mobileRoutes = ["/x-notes/", "/doviz/", "/qr/", "/qr/oku/", "/foto/gizle/"];
   const pages = browserName === "webkit" ? mobileRoutes : [...new Set(routes), "/metin-veri/"];
@@ -27,6 +25,37 @@ test("katalog ve uygulama girişleri dar ekranda açılır", async ({ page, base
     });
   }
   expect(missing).toEqual([]);
+});
+
+test("büyüteç aramayı açar ve kapatınca araç listesi geri gelir", async ({ page }) => {
+  await page.goto("/");
+  const toggle = page.getByRole("button", { name: "Araç ara" });
+  const input = page.getByRole("searchbox", { name: "Araç ara", includeHidden: true });
+  const links = page.getByRole("navigation", { name: "Araçlar" }).getByRole("link");
+  await expect(links.first()).toBeVisible();
+  const toolCount = await links.count();
+  await expect(toggle).toHaveAttribute("aria-expanded", "false");
+  await expect(input).toBeHidden();
+
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-expanded", "true");
+  await expect(input).toBeFocused();
+  await input.fill("MOV");
+  await expect(links.filter({ hasText: "Sesi Yazıya Çevir" })).toBeVisible();
+  await expect.poll(() => links.count()).toBeLessThan(toolCount);
+
+  await input.press("Escape");
+  await expect(toggle).toBeFocused();
+  await expect(input).toBeHidden();
+  await expect(links).toHaveCount(toolCount);
+
+  await toggle.click();
+  await expect(input).toHaveValue("");
+  await input.fill("eşleşmeyecekörnek");
+  await expect(page.getByRole("status")).toHaveText("Aramana uygun araç bulunamadı.");
+  await toggle.click();
+  await expect(page.getByRole("status")).toBeHidden();
+  await expect(links).toHaveCount(toolCount);
 });
 
 test("not kaydı sayfa yenilemesinden sonra kalır", async ({ page }) => {
