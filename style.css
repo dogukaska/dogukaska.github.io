@@ -36,6 +36,7 @@ body {
   -webkit-backdrop-filter: blur(18px) saturate(1.1); backdrop-filter: blur(18px) saturate(1.1);
 }
 main { max-width: 970px; margin: 0 auto; padding: clamp(44px, 8vw, 82px) clamp(18px, 5vw, 40px) 44px; }
+.catalog-page main { padding-top: clamp(68px, 8vw, 82px); }
 header { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; padding-right: 42px; }
 .brand-icon { flex: none; border-radius: 10px; }
 h1 { margin: 0; font-size: clamp(2rem, 6vw, 3rem); font-weight: 650; line-height: 1.1; letter-spacing: -0.05em; }

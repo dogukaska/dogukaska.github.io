@@ -13,6 +13,7 @@
   }
   var SUN = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>';
   var MOON = '<path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/>';
+  var REFRESH = '<path d="M20 4v5h-5M4 20v-5h5"/><path d="M5 9a7.5 7.5 0 0 1 12.7-3L20 9M4 15l2.3 3A7.5 7.5 0 0 0 19 15"/>';
 
   function paint(btn) {
     var dark = isDark();
@@ -26,11 +27,14 @@
   function init() {
     var css = document.createElement("style");
     css.textContent =
-      ".tema-btn{position:absolute;top:calc(env(safe-area-inset-top) + 16px);right:calc(env(safe-area-inset-right) + 16px);z-index:50;" +
+      ".page-actions{position:absolute;top:calc(env(safe-area-inset-top) + 16px);right:calc(env(safe-area-inset-right) + 16px);z-index:50;display:flex;gap:7px}" +
+      ".page-actions button{" +
       "width:40px;height:40px;border-radius:50%;display:grid;place-items:center;cursor:pointer;padding:0;color:var(--ink);" +
       "background:var(--glass);border:1px solid var(--glass-edge);box-shadow:var(--shadow);" +
       "-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);transition:transform .15s}" +
-      ".tema-btn:active{transform:scale(.92)}";
+      ".page-actions button:active{transform:scale(.92)}" +
+      ".page-actions button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}" +
+      "@media(prefers-reduced-motion:reduce){.page-actions button{transition:none}}";
     document.head.appendChild(css);
     var btn = document.createElement("button");
     btn.type = "button";
@@ -42,7 +46,17 @@
       paint(btn);
     });
     mq.addEventListener && mq.addEventListener("change", function () { paint(btn); });
-    document.body.appendChild(btn);
+    var refresh = document.createElement("button");
+    refresh.type = "button";
+    refresh.className = "refresh-btn";
+    refresh.title = "Sayfayı yenile";
+    refresh.setAttribute("aria-label", refresh.title);
+    refresh.innerHTML = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + REFRESH + "</svg>";
+    refresh.addEventListener("click", function () { window.location.reload(); });
+    var actions = document.createElement("div");
+    actions.className = "page-actions";
+    actions.append(refresh, btn);
+    document.body.appendChild(actions);
     paint(btn);
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
