@@ -116,3 +116,34 @@ test("mobilya oda sınırında kalır ve 3D görünüm döndürülebilir", async
   await page.getByRole("button", { name: "3D önizleme" }).click();
   await expect(page.locator("#item-elevation")).toHaveValue("125");
 });
+
+test("mobilya 3D önizlemede dört açıdan sürüklenir ve köşede kalır", async ({ page }) => {
+  await page.goto("/ev/yerlesim/");
+  await page.getByRole("button", { name: "Mobilyayı ekle" }).click();
+  const preview = page.getByRole("button", { name: "3D önizleme" });
+  const turn = page.getByRole("button", { name: "Görünümü döndür" });
+  const canvas = page.locator("#room");
+  const x = page.locator("#item-x");
+  const y = page.locator("#item-y");
+
+  for (const [angle, [expectedX, expectedY]] of [[210, 245], [210, 0], [0, 0], [0, 245]].entries()) {
+    await x.fill("105");
+    await y.fill("123");
+    await y.press("Tab");
+    await preview.click();
+    if (angle) await turn.click();
+    await canvas.scrollIntoViewIfNeeded();
+    const bounds = await canvas.boundingBox();
+    const center = bounds.x + bounds.width / 2;
+    await page.mouse.move(center, bounds.y + bounds.height * .46);
+    await page.mouse.down();
+    await page.mouse.move(center, bounds.y + bounds.height - 3, { steps: 5 });
+    await page.mouse.up();
+    await preview.click();
+    await expect(x).toHaveValue(String(expectedX));
+    await expect(y).toHaveValue(String(expectedY));
+  }
+  await page.reload();
+  await expect(x).toHaveValue("0");
+  await expect(y).toHaveValue("245");
+});
