@@ -16,8 +16,9 @@
 <meta name="apple-mobile-web-app-title" content="Dijital Çakı">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <script src="/theme.js?v=20261125d"></script>
-<link rel="stylesheet" href="/style.css?v=20261126a">
-<script type="module" src="/app.js?v=20261126a"></script>
+<link rel="stylesheet" href="/style.css?v=20261126b">
+<script type="module" src="/app.js?v=20261126b"></script>
+<script type="module" src="/catalog-search.js?v=20261126b"></script>
 </head>
 <body>
 <main>
@@ -25,6 +26,11 @@
     <img class="brand-icon" src="/icons/dijital-caki.svg" width="44" height="44" alt="">
     <h1>Dijital Çakı</h1>
   </header>
+  <div class="catalog-search">
+    <label for="tool-search">Araç ara</label>
+    <input id="tool-search" type="search" placeholder="Örn. PDF, fotoğraf, barkod" autocomplete="off">
+  </div>
+  <p id="no-tools" role="status" hidden>Aramana uygun araç bulunamadı.</p>
   <nav id="grid" class="grid" aria-label="Araçlar"></nav>
 </main>
 </body>
