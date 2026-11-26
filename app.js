@@ -1,6 +1,7 @@
-import { CATEGORIES } from "./apps.js?v=20261126k";
+import { CATEGORIES } from "./apps.js?v=20261127b";
 import { icon } from "./icons.js?v=20261126g";
 
+const visiblePerCategory = 6;
 const grid = document.getElementById("grid");
 for (const category of CATEGORIES) {
   if (!category.apps.length) continue;
@@ -13,6 +14,7 @@ for (const category of CATEGORIES) {
   section.className = "category";
   const list = document.createElement("ul");
   list.className = "tool-list";
+  list.id = "tools-" + category.id;
   list.setAttribute("role", "list");
   for (const app of category.apps) {
     const row = document.createElement("li");
@@ -32,9 +34,22 @@ for (const category of CATEGORIES) {
     details.append(label, description);
     link.append(glyph, details);
     row.dataset.search = [category.name, app.name, app.desc, app.terms].join(" ");
+    if (list.children.length >= visiblePerCategory) {
+      row.dataset.overflow = "";
+      row.hidden = true;
+    }
     row.append(link);
     list.append(row);
   }
   section.append(heading, list);
+  if (category.apps.length > visiblePerCategory) {
+    const more = document.createElement("button");
+    more.type = "button";
+    more.className = "category-more";
+    more.textContent = "Diğer araçları gör";
+    more.setAttribute("aria-expanded", "false");
+    more.setAttribute("aria-controls", list.id);
+    section.append(more);
+  }
   grid.append(section);
 }
