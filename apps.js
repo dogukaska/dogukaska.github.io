@@ -19,7 +19,9 @@ export const CATEGORIES = [
     { name: "PDF Düzenle", desc: "Sayfaları birleştir, sırala ve döndür", terms: "pdf birleştir pdf ayır sayfa çıkar", url: "/belge/pdf/", icon: "file" },
     { name: "Metni Kopyala", desc: "Görselden Türkçe metin çıkar", terms: "ocr resimden yazı fotoğraftan metin", url: "/belge/ocr/", icon: "scan" },
   ] },
-  { sectionId: "tracking" },
+  { id: "takip", name: "Takip", apps: [
+    { name: "Döviz ve Altın Çevirici", desc: "Altın, dolar, euro ve sterlin kurlarını gör, TL karşılığını hesapla", terms: "gram altın usd avro eur gbp alış satış", url: "/doviz/", icon: "exchange" },
+  ] },
   { id: "kod", name: "QR ve Barkod", apps: [
     { name: "QR Kod", desc: "Wi-Fi, IBAN ve kartvizit için QR oluştur", terms: "karekod whatsapp telefon konum bağlantı", url: "/qr/", icon: "qr" },
     { name: "QR Oku", desc: "Kameradan veya görselden QR oku", terms: "karekod tara qr okut", url: "/qr/oku/", icon: "scan" },

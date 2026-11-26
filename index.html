@@ -16,10 +16,9 @@
 <meta name="apple-mobile-web-app-title" content="Dijital Çakı">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <script src="/theme.js?v=20261126c"></script>
-<link rel="stylesheet" href="/style.css?v=20261126f">
-<script type="module" src="/app.js?v=20261126g"></script>
+<link rel="stylesheet" href="/style.css?v=20261126g">
+<script type="module" src="/app.js?v=20261126h"></script>
 <script type="module" src="/catalog-search.js?v=20261126d"></script>
-<script type="module" src="/market-rates.js?v=2"></script>
 </head>
 <body class="catalog-page">
 <main>
@@ -32,59 +31,7 @@
     <input id="tool-search" type="search" placeholder="Örn. PDF, fotoğraf, barkod" autocomplete="off">
   </div>
   <p id="no-tools" role="status" hidden>Aramana uygun araç bulunamadı.</p>
-  <nav id="grid" class="grid" aria-label="Araçlar">
-    <section id="tracking" class="category" aria-labelledby="category-takip">
-      <h2 id="category-takip">Takip</h2>
-      <div class="market-rates glass" data-search="Takip gram altın dolar usd euro avro eur sterlin gbp döviz çevirici kur hesapla TL alış satış">
-        <h3 id="rates-title">Altın ve döviz</h3>
-        <table aria-labelledby="rates-title">
-          <thead><tr><td></td><th scope="col">Alış</th><th scope="col">Satış</th></tr></thead>
-          <tbody>
-            <tr data-rate="XAU_GRAM">
-              <th scope="row">Gram Altın <time hidden></time><small class="rate-note" role="status" hidden></small></th>
-              <td data-price="buy">—</td><td data-price="sell">—</td>
-            </tr>
-            <tr data-rate="USD">
-              <th scope="row">Dolar/TL <time hidden></time><small class="rate-note" role="status" hidden></small></th>
-              <td data-price="buy">—</td><td data-price="sell">—</td>
-            </tr>
-            <tr data-rate="EUR">
-              <th scope="row">Euro/TL <time hidden></time><small class="rate-note" role="status" hidden></small></th>
-              <td data-price="buy">—</td><td data-price="sell">—</td>
-            </tr>
-            <tr data-rate="GBP">
-              <th scope="row">Sterlin/TL <time hidden></time><small class="rate-note" role="status" hidden></small></th>
-              <td data-price="buy">—</td><td data-price="sell">—</td>
-            </tr>
-          </tbody>
-        </table>
-        <p id="rates-status" role="status">Fiyatlar yükleniyor…</p>
-        <div class="rate-converter">
-          <h3>Döviz ve Altın Çevirici</h3>
-          <div class="converter-fields">
-            <label>Miktar <input id="rate-amount" type="text" inputmode="decimal" value="1" maxlength="16"></label>
-            <label>Altın veya döviz
-              <select id="rate-unit">
-                <option value="XAU_GRAM">Gram Altın</option>
-                <option value="USD">ABD Doları</option>
-                <option value="EUR">Euro</option>
-                <option value="GBP">Sterlin</option>
-              </select>
-            </label>
-          </div>
-          <div class="converter-results" aria-live="polite" aria-atomic="true">
-            <div><span>Alırken ödersin</span><output id="rate-cost" for="rate-amount rate-unit" aria-live="off">—</output></div>
-            <div><span>Satarken alırsın</span><output id="rate-value" for="rate-amount rate-unit" aria-live="off">—</output></div>
-          </div>
-          <p id="converter-note" class="rate-note" role="status" hidden></p>
-        </div>
-        <div class="rates-footer">
-          <a href="https://turkishlirarates.com/">Kaynak: TurkishLiraRates</a>
-          <span>Görünürken yaklaşık 60 sn’de bir kontrol</span>
-        </div>
-      </div>
-    </section>
-  </nav>
+  <nav id="grid" class="grid" aria-label="Araçlar"></nav>
 </main>
 </body>
 </html>
