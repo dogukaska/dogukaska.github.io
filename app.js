@@ -1,4 +1,4 @@
-import { CATEGORIES } from "./apps.js?v=20261126a";
+import { CATEGORIES } from "./apps.js?v=20261126b";
 import { icon } from "./icons.js?v=20261125e";
 
 const grid = document.getElementById("grid");
@@ -9,6 +9,7 @@ for (const category of CATEGORIES) {
   heading.id = `category-${category.id}`;
   heading.textContent = category.name;
   section.setAttribute("aria-labelledby", heading.id);
+  section.className = "category";
   const list = document.createElement("ul");
   list.className = "tool-list";
   list.setAttribute("role", "list");

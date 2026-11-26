@@ -1,0 +1,4 @@
+.tool-links { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; }
+.tool-links a { display: inline-flex; align-items: center; padding: 5px 12px; min-height: 38px; border-radius: 9px; border: 1px solid var(--glass-edge); background: var(--glass); color: var(--ink); text-decoration: none; font-size: .875rem; }
+.tool-links a:hover { text-decoration: underline; }
+.tool-links a:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
