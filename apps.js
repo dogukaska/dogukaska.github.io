@@ -19,6 +19,7 @@ export const CATEGORIES = [
     { name: "PDF Düzenle", desc: "Sayfaları birleştir, sırala ve döndür", terms: "pdf birleştir pdf ayır sayfa çıkar", url: "/belge/pdf/", icon: "file" },
     { name: "Metni Kopyala", desc: "Görselden Türkçe metin çıkar", terms: "ocr resimden yazı fotoğraftan metin", url: "/belge/ocr/", icon: "scan" },
   ] },
+  { sectionId: "tracking" },
   { id: "kod", name: "QR ve Barkod", apps: [
     { name: "QR Kod", desc: "Wi-Fi, IBAN ve kartvizit için QR oluştur", terms: "karekod whatsapp telefon konum bağlantı", url: "/qr/", icon: "qr" },
     { name: "QR Oku", desc: "Kameradan veya görselden QR oku", terms: "karekod tara qr okut", url: "/qr/oku/", icon: "scan" },
