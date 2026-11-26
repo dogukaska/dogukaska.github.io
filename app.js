@@ -1,4 +1,4 @@
-import { CATEGORIES } from "./apps.js?v=20261126h";
+import { CATEGORIES } from "./apps.js?v=20261126i";
 import { icon } from "./icons.js?v=20261126g";
 
 const grid = document.getElementById("grid");
