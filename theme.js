@@ -28,7 +28,7 @@
     var css = document.createElement("style");
     css.textContent =
       ".page-actions{position:absolute;top:calc(env(safe-area-inset-top) + 16px);right:calc(env(safe-area-inset-right) + 16px);z-index:50;display:flex;gap:7px}" +
-      ".page-actions button{" +
+      ".page-actions button:not([hidden]){" +
       "width:40px;height:40px;border-radius:50%;display:grid;place-items:center;cursor:pointer;padding:0;color:var(--ink);" +
       "background:var(--glass);border:1px solid var(--glass-edge);box-shadow:var(--shadow);" +
       "-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);transition:transform .15s}" +
@@ -53,10 +53,13 @@
     refresh.setAttribute("aria-label", refresh.title);
     refresh.innerHTML = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + REFRESH + "</svg>";
     refresh.addEventListener("click", function () { window.location.reload(); });
-    var actions = document.createElement("div");
-    actions.className = "page-actions";
+    var actions = document.getElementById("page-actions");
+    if (!actions) {
+      actions = document.createElement("div");
+      actions.className = "page-actions";
+      document.body.appendChild(actions);
+    }
     actions.append(refresh, btn);
-    document.body.appendChild(actions);
     paint(btn);
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();

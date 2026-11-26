@@ -33,7 +33,7 @@ function setExpanded(expanded) {
 }
 
 toggle.addEventListener("click", () => setExpanded(panel.hidden));
-document.querySelector("main").addEventListener("keydown", (event) => {
+document.addEventListener("keydown", (event) => {
   if (event.key !== "Escape" || event.isComposing || panel.hidden) return;
   event.preventDefault();
   setExpanded(false);
