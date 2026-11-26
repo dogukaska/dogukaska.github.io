@@ -8,6 +8,7 @@ export const CATEGORIES = [
   { id: "video", name: "Video ve Ses", apps: [
     { name: "Video Araçları", desc: "Ses çıkar, GIF yap", terms: "mp3 wav hareketli resim gif", url: "/video/", icon: "video" },
     { name: "Ses Kırp", desc: "Bir bölümü seç ve MP3 veya WAV indir", terms: "ses kes ses düzenle", url: "/video/ses-kirp/", icon: "scissors" },
+    { name: "Sesi Yazıya Çevir", desc: "Türkçe ses kaydını metne dönüştür", terms: "sesli mesaj konuşma deşifre transkripsiyon mp3 m4a wav", url: "/video/ses-yaziya/", icon: "file" },
   ] },
   { id: "belge", name: "Belge ve Kitap", apps: [
     { name: "Belge Tarayıcı", desc: "Belgeyi tara, düzelt, PDF yap", terms: "kamera tarama pdf kitap", url: "/belge/", icon: "scan" },
