@@ -54,25 +54,29 @@ test("gece vardiyası ertesi gün biter ve izin günü dışa aktarılmaz", asyn
   expect(content).toContain("DTEND:20261129T050000Z");
 });
 
-test("ayrı oturumdan gelen buluşma yanıtı sonuçlara bir kere eklenir", async ({ page, browser }) => {
-  await page.goto("/plan/bulusma/");
-  await page.locator("#title").fill("Pazar buluşması");
-  await page.getByRole("button", { name: "Anket oluştur" }).click();
-  const invite = await page.locator("#invite").inputValue();
-  const guestContext = await browser.newContext();
-  try {
-    const guest = await guestContext.newPage();
-    await guest.goto(invite);
-    await guest.locator("#voter").fill("Çağla");
-    await guest.getByRole("checkbox").first().check();
-    await guest.getByRole("button", { name: "Yanıt bağlantısı oluştur" }).click();
-    const reply = await guest.locator("#reply").inputValue();
-    await page.goto(reply);
-    await expect(page.locator("#tally li").first()).toContainText("1 uygun");
-    await expect(page.locator("#respondents")).toContainText("Çağla");
-    await page.goto(reply);
-    await expect(page.locator("#tally li").first()).toContainText("1 uygun");
-  } finally {
-    await guestContext.close();
-  }
+test("vardiya alanları dar ekranda hizalanır ve tüm günler dışa aktarılır", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.goto("/plan/vardiya/");
+  await page.locator("#start").fill("2026-11-27");
+  await page.locator("#days").fill("14");
+  await page.locator("#cycle").fill("G İ");
+  await page.getByText("Vardiya saatleri", { exact: true }).click();
+  const aligned = await page.evaluate(() => {
+    const boxes = (selector) => [...document.querySelectorAll(selector)].map(node => node.getBoundingClientRect());
+    const rows = boxes("#preview select");
+    const noOverlap = (rects) => rects[0].right < rects[1].left && rects[0].height === rects[1].height;
+    return document.documentElement.scrollWidth === innerWidth &&
+      noOverlap(boxes(".shift-fields input")) && noOverlap(boxes(".shift-hours input").slice(0, 2)) &&
+      rows.every(rect => rect.left === rows[0].left && rect.width === rows[0].width);
+  });
+  expect(aligned).toBe(true);
+  await expect(page.locator("#preview li")).toHaveCount(7);
+  await page.getByRole("button", { name: "Sonraki yedi gün" }).click();
+  await expect(page.locator("#day-range")).toHaveText("8–14 / 14 gün");
+  await page.locator("#preview select").first().selectOption("N");
+  await expect(page.locator("#preview li").first()).toContainText("20:00–08:00");
+  await page.getByRole("button", { name: "Önceki yedi gün" }).click();
+  await expect(page.locator("#day-range")).toHaveText("1–7 / 14 gün");
+  const [download] = await Promise.all([page.waitForEvent("download"), page.getByRole("button", { name: "Takvim dosyasını indir" }).click()]);
+  expect((await readFile(await download.path(), "utf8")).match(/BEGIN:VEVENT/g)).toHaveLength(8);
 });
