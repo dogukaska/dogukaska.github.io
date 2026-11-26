@@ -140,6 +140,50 @@ test("geciken CSV okuması yeni metni ezmez", async ({ page }) => {
   await expect(page.locator("#output")).toHaveValue(/2,yeni/);
 });
 
+test("döviz isteği uygulama betiğini beklemez ve eski fiyatı günceller", async ({ page }) => {
+  const ratesUrl = "https://turkishlirarates.com/data/v1/rates.json";
+  const script = Promise.withResolvers();
+  const rates = Promise.withResolvers();
+  let requests = 0;
+  await page.addInitScript(() => {
+    localStorage.setItem("dijital-caki-piyasa-fiyatlari-v1", JSON.stringify({
+      USD: { buy: 47, sell: 48, time: new Date(Date.now() - 3 * 60 * 60_000).toISOString() },
+    }));
+  });
+  await page.route("**/doviz/app.js?*", async (route) => {
+    await script.promise;
+    await route.continue();
+  });
+  await page.route(ratesUrl, async (route) => {
+    requests++;
+    await rates.promise;
+    await route.fulfill({
+      json: {
+        market: {
+          status: "live", currencies: [{ code: "USD", buy: 49, sell: 50, time: new Date().toISOString(), fresh: true }],
+        },
+      },
+      headers: { "access-control-allow-origin": "*" },
+    });
+  });
+
+  try {
+    await page.goto("/doviz/", { waitUntil: "commit" });
+    await expect.poll(() => requests).toBe(1);
+    script.resolve();
+    const dollar = page.locator('[data-rate="USD"] [data-price="sell"]');
+    await expect(dollar).toHaveText(/^48,/);
+    await expect(page.locator("#rates-status")).toHaveText("Fiyatlar güncelleniyor…");
+    rates.resolve();
+    await expect(dollar).toHaveText(/^50,/);
+    await expect(page.locator("#rates-status")).toBeHidden();
+    expect(requests).toBe(1);
+  } finally {
+    script.resolve();
+    rates.resolve();
+  }
+});
+
 test("gelecek tarihli kur önbelleği güncel veriyi engellemez", async ({ page }) => {
   await page.addInitScript(() => {
     localStorage.setItem("dijital-caki-piyasa-fiyatlari-v1", JSON.stringify({

@@ -69,9 +69,14 @@ function renderConverter(loading = false) {
 
 function render(loading = false) {
   const any = rows.some(row => row.last);
-  const today = dateFormat.format(Date.now());
-  status.textContent = any ? "" : loading ? "Fiyatlar yükleniyor…" : "Fiyat şu anda alınamıyor";
-  status.hidden = any;
+  const now = Date.now();
+  const today = dateFormat.format(now);
+  const showingOldPrices = rows.some(row => row.last && now - Date.parse(row.last.time) > maxPriceAge);
+  let message = "";
+  if (!any) message = loading ? "Fiyatlar yükleniyor…" : "Fiyat şu anda alınamıyor";
+  else if (loading && showingOldPrices) message = "Fiyatlar güncelleniyor…";
+  if (status.textContent !== message) status.textContent = message;
+  status.hidden = !message;
   for (const row of rows) {
     const price = row.last;
     row.buy.textContent = price ? priceFormat.format(price.buy) + " TL" : "—";
@@ -106,7 +111,8 @@ async function refresh() {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 12_000);
   try {
-    const response = await fetch(endpoint, { cache: "no-cache", signal: controller.signal });
+    // İlk istek HTML'deki preload yanıtını kullanır; sonraki istekler kaynağın önbellek süresini izler.
+    const response = await fetch(endpoint, { signal: controller.signal });
     if (!response.ok) throw new Error("Fiyat yanıtı başarısız");
     const { market } = await response.json();
     const next = {};
@@ -132,6 +138,7 @@ async function refresh() {
 }
 
 document.addEventListener("visibilitychange", schedule);
+window.addEventListener("pageshow", schedule);
 window.addEventListener("online", () => {
   lastAttempt = -Infinity;
   schedule();
