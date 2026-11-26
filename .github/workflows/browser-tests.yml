@@ -1,0 +1,67 @@
+name: Tarayıcı testleri
+
+on:
+  workflow_call:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  browser:
+    name: Dijital Çakı tarayıcı denetimi
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      DK_APPS_ROOT: ${{ github.workspace }}/apps
+    defaults:
+      run:
+        working-directory: hub
+    steps:
+      - name: Test deposunu al
+        uses: actions/checkout@v4
+        with:
+          repository: dogukaska/dogukaska.github.io
+          ref: ${{ github.repository == 'dogukaska/dogukaska.github.io' && github.sha || 'main' }}
+          persist-credentials: false
+          path: hub
+
+      - name: Değişen uygulamanın aday sürümünü al
+        if: github.repository != 'dogukaska/dogukaska.github.io'
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          path: apps/${{ github.event.repository.name }}
+
+      - name: Diğer uygulamaları al
+        shell: bash
+        run: |
+          mkdir -p "$DK_APPS_ROOT"
+          for app in belge foto metin-veri pdf-epub qr video; do
+            if [ ! -d "$DK_APPS_ROOT/$app/.git" ]; then
+              git clone --depth 1 "https://github.com/dogukaska/$app.git" "$DK_APPS_ROOT/$app"
+            fi
+          done
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: hub/package-lock.json
+
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium webkit
+      - run: npm run test:browser
+
+      - name: Başarısız test izlerini yükle
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tarayici-test-izleri
+          path: hub/test-results/
+          if-no-files-found: ignore
+          retention-days: 7
