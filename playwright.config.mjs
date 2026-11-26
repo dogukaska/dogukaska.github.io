@@ -24,7 +24,7 @@ export default defineConfig({
     },
     {
       name: "webkit-mobile",
-      testMatch: /catalog\.spec\.mjs/,
+      testMatch: /(?:catalog|daily)\.spec\.mjs$/,
       use: {
         browserName: "webkit",
         viewport: { width: 320, height: 820 },

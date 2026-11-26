@@ -27,4 +27,17 @@ export const CATEGORIES = [
     { name: "QR Oku", desc: "Kameradan veya görselden QR oku", terms: "karekod tara qr okut", url: "/qr/oku/", icon: "scan" },
     { name: "Barkod Oluştur", desc: "Code 128 ve EAN‑13 üret", terms: "ean market ürün barkodu", url: "/qr/barkod/", icon: "file" },
   ] },
+  { id: "dosya", name: "Dosya", apps: [
+    { name: "Arşiv Açıcı", desc: "ZIP, RAR ve 7z dosyalarının içini aç", terms: "arşiv sıkıştırma çıkart unzip winrar parola", url: "/dosya/arsiv/", icon: "file" },
+  ] },
+  { id: "mutfak", name: "Mutfak", apps: [
+    { name: "Tarif Kartı", desc: "Tarif sakla, porsiyonu değiştir ve malzemeleri işaretle", terms: "yemek malzeme porsiyon mutfak tarif ölçü", url: "/mutfak/tarif/", icon: "book" },
+  ] },
+  { id: "ev", name: "Ev", apps: [
+    { name: "Odaya Sığar mı?", desc: "Mobilya ve kapı ölçüleriyle oda yerleşimini çiz", terms: "oda planı koltuk mobilya boyut yerleşim santimetre", url: "/ev/yerlesim/", icon: "image" },
+  ] },
+  { id: "plan", name: "Planlama", apps: [
+    { name: "Vardiyayı Takvime Aktar", desc: "Nöbet döngünü oluştur ve takvim dosyası indir", terms: "vardiya nöbet takvim ics gündüz gece izin", url: "/plan/vardiya/", icon: "file" },
+    { name: "Ne Zaman Buluşalım?", desc: "Saat seçeneklerini paylaş ve yanıtları topla", terms: "grup anket etkinlik buluşma whatsapp uygunluk oylama", url: "/plan/bulusma/", icon: "note" },
+  ] },
 ];
