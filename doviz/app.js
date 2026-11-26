@@ -37,9 +37,9 @@ for (const row of rows) {
 }
 
 function validPrice(item) {
-  return Number.isFinite(item?.buy) && item.buy > 0 &&
-    Number.isFinite(item.sell) && item.sell > 0 &&
-    typeof item.time === "string" && Number.isFinite(Date.parse(item.time));
+  const time = typeof item?.time === "string" ? Date.parse(item.time) : NaN;
+  return Number.isFinite(time) && time <= Date.now() + refreshInterval &&
+    Number.isFinite(item.buy) && item.buy > 0 && Number.isFinite(item.sell) && item.sell >= item.buy;
 }
 
 let cached = {};
@@ -53,12 +53,15 @@ function renderConverter(loading = false) {
   const quantity = /^\d+(?:[.,]\d+)?$/.test(input) ? Number(input.replace(",", ".")) : NaN;
   const row = rows.find(row => row.code === unit.value);
   const quote = row?.last;
-  const canConvert = Number.isFinite(quantity) && quote;
-  cost.value = canConvert ? totalFormat.format(quantity * quote.sell) + " TL" : "—";
-  value.value = canConvert ? totalFormat.format(quantity * quote.buy) + " TL" : "—";
+  const costAmount = quantity * quote?.sell;
+  const valueAmount = quantity * quote?.buy;
+  const canConvert = Number.isFinite(costAmount) && Number.isFinite(valueAmount);
+  cost.value = canConvert ? totalFormat.format(costAmount) + " TL" : "—";
+  value.value = canConvert ? totalFormat.format(valueAmount) + " TL" : "—";
   let note = "";
   if (input && !Number.isFinite(quantity)) note = "Geçerli bir miktar gir.";
   else if (input && !quote && !loading) note = "Hesaplama için fiyat alınamadı.";
+  else if (input && quote && !canConvert) note = "Daha küçük bir miktar gir.";
   else if (canConvert && !row.current) note = "Son alınan fiyatla hesaplandı.";
   if (converterNote.textContent !== note) converterNote.textContent = note;
   converterNote.hidden = !note;
