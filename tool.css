@@ -1,29 +1,32 @@
-@import url("/style.css?v=20261126b");
+@import url("/style.css?v=20261126d");
+@import url("/ui-compact.css?v=20261126d");
 .tool { max-width: 960px; }
-.tool header { display: block; margin-bottom: 26px; }
-.tool .back { display: inline-block; margin-bottom: 18px; font-size: .9rem; color: var(--muted, var(--mute)); }
-.tool h1 { font-size: clamp(2rem, 6vw, 2.9rem); }
+.tool header { display: block; margin-bottom: 18px; padding-right: 0; }
+.tool .back { display: inline-block; margin-bottom: 12px; font-size: .875rem; color: var(--mute); }
+.tool h1 { font-size: clamp(1.65rem, 5vw, 2.5rem); }
 .tool h2 { margin: 0 0 12px; font-size: 1.05rem; }
-.tool .intro { color: var(--mute); margin: 8px 0 0; }
-.panel { background: var(--glass); border: 1px solid var(--line); padding: clamp(14px, 3vw, 25px); border-radius: 16px; margin: 0 0 16px; }
-.panel > * + * { margin-top: 12px; }
-.tool .row { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; }
-.tool button, .tool .button { min-height: 42px; padding: 7px 13px; font: inherit; border: 1px solid var(--line); border-radius: 9px; color: var(--ink); background: var(--glass); cursor: pointer; }
+.tool .intro { color: var(--mute); margin: 5px 0 0; font-size: .875rem; }
+.panel { margin: 0 0 14px; }
+.panel + .panel { border-top: 1px solid var(--line); padding-top: 12px; }
+.panel > * + * { margin-top: 8px; }
+.tool .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--control-gap); }
+.tool button, .tool .button { min-height: var(--control-height); padding: 5px 9px; font: inherit; font-size: .875rem; font-weight: 500; line-height: 1.2; border: 1px solid var(--line); border-radius: var(--control-radius); color: var(--ink); background: var(--glass); cursor: pointer; }
 .tool .primary { color: var(--solid-ink); background: var(--solid); border-color: var(--solid); }
 .tool button:disabled { opacity: .55; cursor: default; }
 .tool button:focus-visible, .tool a:focus-visible, .tool input:focus-visible, .tool textarea:focus-visible, .tool select:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
-.tool input:not([type=checkbox]), .tool select, .tool textarea { width: 100%; min-height: 42px; padding: 8px; font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; }
-.tool input[type=file] { border-style: dashed; padding: 13px; }
-.tool input::file-selector-button { margin-right: 8px; padding: 6px 9px; font: inherit; }
+.tool input:not([type=checkbox]), .tool select, .tool textarea { width: 100%; min-height: var(--control-height); padding: 6px 8px; font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: var(--control-radius); }
+.tool input[type=file] { padding: 4px; font-size: .875rem; background: transparent; }
+.tool input::file-selector-button { min-height: calc(var(--control-height) - 8px); margin-right: 7px; padding: 3px 8px; font: inherit; border-radius: 5px; color: var(--ink); background: var(--glass); border: 1px solid var(--line); cursor: pointer; }
 .tool .row label, .tool .row input { flex: 1 1 110px; }
-.tool label { display: block; }
+.tool label { display: block; font-size: .875rem; }
 .tool canvas, .tool img, .tool audio { max-width: 100%; }
 .tool canvas { display: block; height: auto; }
-.tool [role=status] { min-height: 1.5em; color: var(--mute); overflow-wrap: anywhere; }
+.tool [role=status] { margin-block: 7px; font-size: .875rem; color: var(--mute); overflow-wrap: anywhere; }
+.tool [role=status]:empty { margin: 0; }
 .tool pre { overflow-wrap: anywhere; white-space: pre-wrap; }
 .tool [hidden] { display: none !important; }
 .tool .sheet-list { list-style: none; display: grid; gap: 10px; padding: 0; }
-.tool .sheet { display: grid; grid-template-columns: auto minmax(0,1fr); gap: 12px; padding: 10px; border: 1px solid var(--line); border-radius: 10px; }
+.tool .sheet { display: grid; grid-template-columns: auto minmax(0,1fr); gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); }
 .tool .sheet p { margin: 0 0 6px; overflow-wrap: anywhere; }
 .tool .sheet canvas { max-width: 66px; max-height: 91px; justify-self: center; }
 .tool .pdf-thumb { display: grid; place-items: center; width: clamp(56px, 12vw, 96px); min-height: 96px; overflow: hidden; }
