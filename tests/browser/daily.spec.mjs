@@ -83,3 +83,36 @@ test("vardiya alanları dar ekranda hizalanır ve tüm günler dışa aktarılı
   const [download] = await Promise.all([page.waitForEvent("download"), page.getByRole("button", { name: "Takvim dosyasını indir" }).click()]);
   expect((await readFile(await download.path(), "utf8")).match(/BEGIN:VEVENT/g)).toHaveLength(8);
 });
+
+test("mobilya oda sınırında kalır ve 3D görünüm döndürülebilir", async ({ page }) => {
+  await page.goto("/ev/yerlesim/");
+  await page.getByRole("button", { name: "Mobilyayı ekle" }).click();
+  const canvas = page.locator("#room");
+  await canvas.scrollIntoViewIfNeeded();
+  const bounds = await canvas.boundingBox();
+  await page.mouse.move(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(bounds.x + bounds.width - 2, bounds.y + bounds.height - 2, { steps: 5 });
+  await page.mouse.up();
+  await expect(page.locator("#item-x")).toHaveValue("210");
+  await expect(page.locator("#item-y")).toHaveValue("245");
+  await page.locator("#item-x").fill("-80");
+  await page.locator("#item-x").press("Tab");
+  await expect(page.locator("#item-x")).toHaveValue("0");
+  await page.getByRole("button", { name: "90° döndür" }).click();
+  await expect(page.locator("#item-y")).toHaveValue("120");
+  const flat = await canvas.evaluate(node => node.toDataURL());
+  await page.getByRole("button", { name: "3D önizleme" }).click();
+  await expect(canvas).toHaveAccessibleName(/üç boyutlu/);
+  const front = await canvas.evaluate(node => node.toDataURL());
+  expect(front).not.toBe(flat);
+  await page.getByRole("button", { name: "Görünümü döndür" }).click();
+  const turned = await canvas.evaluate(node => node.toDataURL());
+  expect(turned).not.toBe(front);
+  await page.locator("#item-elevation").fill("125");
+  await page.locator("#item-elevation").press("Tab");
+  expect(await canvas.evaluate(node => node.toDataURL())).not.toBe(turned);
+  await page.reload();
+  await page.getByRole("button", { name: "3D önizleme" }).click();
+  await expect(page.locator("#item-elevation")).toHaveValue("125");
+});
