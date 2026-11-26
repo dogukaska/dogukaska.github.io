@@ -6,6 +6,9 @@ const timezone = "Europe/Istanbul";
 const priceFormat = new Intl.NumberFormat("tr-TR", {
   minimumFractionDigits: 2, maximumFractionDigits: 4,
 });
+const totalFormat = new Intl.NumberFormat("tr-TR", {
+  minimumFractionDigits: 2, maximumFractionDigits: 2,
+});
 const clockFormat = new Intl.DateTimeFormat("tr-TR", {
   timeZone: timezone, timeStyle: "short",
 });
@@ -17,7 +20,14 @@ const status = document.getElementById("rates-status");
 const rows = [
   { code: "XAU_GRAM", group: "gold_silver" },
   { code: "USD", group: "currencies" },
+  { code: "EUR", group: "currencies" },
+  { code: "GBP", group: "currencies" },
 ];
+const amount = document.getElementById("rate-amount");
+const unit = document.getElementById("rate-unit");
+const cost = document.getElementById("rate-cost");
+const value = document.getElementById("rate-value");
+const converterNote = document.getElementById("converter-note");
 for (const row of rows) {
   const el = document.querySelector(`[data-rate="${row.code}"]`);
   row.buy = el.querySelector('[data-price="buy"]');
@@ -36,6 +46,22 @@ let cached = {};
 try { cached = JSON.parse(localStorage.getItem(storageKey)) || {}; } catch {}
 for (const row of rows) {
   if (validPrice(cached[row.code])) row.last = cached[row.code];
+}
+
+function renderConverter(loading = false) {
+  const input = amount.value.trim();
+  const quantity = /^\d+(?:[.,]\d+)?$/.test(input) ? Number(input.replace(",", ".")) : NaN;
+  const row = rows.find(row => row.code === unit.value);
+  const quote = row?.last;
+  const canConvert = Number.isFinite(quantity) && quote;
+  cost.value = canConvert ? totalFormat.format(quantity * quote.sell) + " TL" : "—";
+  value.value = canConvert ? totalFormat.format(quantity * quote.buy) + " TL" : "—";
+  let note = "";
+  if (input && !Number.isFinite(quantity)) note = "Geçerli bir miktar gir.";
+  else if (input && !quote && !loading) note = "Hesaplama için fiyat alınamadı.";
+  else if (canConvert && !row.current) note = "Son alınan fiyatla hesaplandı.";
+  if (converterNote.textContent !== note) converterNote.textContent = note;
+  converterNote.hidden = !note;
 }
 
 function render(loading = false) {
@@ -57,6 +83,7 @@ function render(loading = false) {
     if (row.note.textContent !== note) row.note.textContent = note;
     row.note.hidden = !note;
   }
+  renderConverter(loading);
 }
 
 let timer, lastAttempt = -Infinity, inFlight = false;
@@ -110,5 +137,7 @@ window.addEventListener("offline", () => {
   for (const row of rows) row.current = false;
   render();
 });
+amount.addEventListener("input", () => renderConverter());
+unit.addEventListener("change", () => renderConverter());
 render(true);
 schedule();

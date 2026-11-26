@@ -1,8 +1,12 @@
-import { CATEGORIES } from "./apps.js?v=20261126f";
+import { CATEGORIES } from "./apps.js?v=20261126g";
 import { icon } from "./icons.js?v=20261126f";
 
 const grid = document.getElementById("grid");
 for (const category of CATEGORIES) {
+  if (category.sectionId) {
+    grid.append(document.getElementById(category.sectionId));
+    continue;
+  }
   if (!category.apps.length) continue;
   const section = document.createElement("section");
   const heading = document.createElement("h2");

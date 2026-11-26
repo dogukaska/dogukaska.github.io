@@ -7,7 +7,7 @@ function filter() {
   let total = 0;
   for (const group of groups) {
     let count = 0;
-    for (const entry of group.querySelectorAll("li")) {
+    for (const entry of group.querySelectorAll("[data-search]")) {
       const keywords = normalize(entry.dataset.search);
       entry.hidden = !query.every((word) => keywords.includes(word));
       if (!entry.hidden) count++;
