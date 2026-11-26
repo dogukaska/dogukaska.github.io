@@ -55,6 +55,7 @@ test("PDF numarası ve Türkçe filigran metin katmanına eklenir", async ({ pag
 
   await load(page, "filigran", source);
   await page.locator("#mark-text").fill("İstanbul Çeşme");
+  await page.locator("#mark-font").selectOption("serif");
   const marked = await download(page);
   expect((await pageText(page, marked.bytes)).every(t => t.includes("İstanbul Çeşme"))).toBe(true);
 });
