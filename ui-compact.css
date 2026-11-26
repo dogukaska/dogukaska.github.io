@@ -1,0 +1,103 @@
+/* Ortak denetimler. Eski uygulamalarda compact-ui, yeni ekranlarda tool kullanılır. */
+:root {
+  --control-height: 34px;
+  --control-radius: 7px;
+  --control-gap: 6px;
+}
+@media (pointer: coarse) {
+  :root { --control-height: 36px; }
+}
+
+.compact-ui :is(button, .btn, .tab, .drop):focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+.compact-ui :is(button.primary, .actions button, .btn, button.ghost, .files li button, #restart, #next-low) {
+  min-height: var(--control-height);
+  padding: 5px 10px;
+  border-radius: var(--control-radius);
+  font-size: .875rem;
+  line-height: 1.2;
+  gap: var(--control-gap);
+}
+.compact-ui :is(.actions, .tool-links) { gap: var(--control-gap); }
+.compact-ui .tool-links a {
+  min-height: var(--control-height);
+  padding: 5px 9px;
+  border-radius: var(--control-radius);
+}
+.compact-ui :is(.tabs, .seg) {
+  max-width: 100%;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 9px;
+  box-shadow: none;
+}
+.compact-ui :is(.tabs .tab, .seg button, .seg.small button, .seg .colorbtn) {
+  min-height: var(--control-height);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: .875rem;
+  line-height: 1.2;
+}
+.compact-ui :is(.seg button.on, .seg .colorbtn.on) {
+  background: var(--glass);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.compact-ui .card {
+  padding: clamp(10px, 3vw, 16px);
+  border-radius: 11px;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.compact-ui .panel > .card { padding: clamp(10px, 3vw, 16px); }
+.compact-ui .card .card { border: 0; background: transparent; padding: 0; }
+.compact-ui .drop { padding: 15px 10px; gap: 4px; border-radius: 9px; box-shadow: none; }
+.compact-ui label.drop { position: relative; }
+.compact-ui label.drop > input[type=file] {
+  position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;
+}
+.compact-ui label.drop:focus-within { outline: 2px solid var(--ink); outline-offset: 3px; }
+.compact-ui .drop-icon svg { width: 22px; height: 22px; }
+.compact-ui textarea,
+.compact-ui :is(input[type=text], input[type=url], input[type=tel], input[type=email], input[type=password], input[type=number], select) {
+  padding: 6px 9px;
+  border-radius: var(--control-radius);
+}
+.compact-ui .panel > * + * { margin-top: 10px; }
+
+.tool .ui-toolbar { display: flex; flex-wrap: wrap; gap: var(--control-gap); align-items: center; }
+.tool .ui-segmented {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  padding: 2px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--glass);
+}
+.tool .ui-segmented button {
+  min-height: calc(var(--control-height) - 4px);
+  padding: 3px 7px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: transparent;
+}
+.tool .ui-segmented button[aria-pressed=true] {
+  border-color: var(--line);
+  color: var(--ink);
+  background: var(--bg);
+  font-weight: 650;
+}
+.tool .ui-icon { display: inline-grid; place-items: center; width: var(--control-height); padding: 0; }
+.tool .ui-icon svg { width: 16px; height: 16px; }
+.tool .ui-quiet { background: transparent; border-color: transparent; padding-inline: 6px; }
+.tool .ui-quiet:hover:enabled { background: var(--glass); border-color: var(--line); }
+.tool .ui-file-line { display: flex; align-items: center; min-width: 0; gap: 8px; }
+.tool .ui-file-line .file-name { flex: 1; min-width: 0; font-size: .8125rem; color: var(--mute); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tool .ui-file-line .button { flex: none; }
+.tool .ui-hidden-input { position: absolute; width: 1px !important; height: 1px; min-height: 0 !important; padding: 0 !important; border: 0 !important; overflow: hidden; clip-path: inset(50%); }
+.tool .ui-hidden-input:focus-visible + label { outline: 2px solid var(--ink); outline-offset: 2px; }

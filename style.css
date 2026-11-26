@@ -45,24 +45,24 @@ h1 { margin: 0; font-size: clamp(2rem, 6vw, 3rem); font-weight: 650; line-height
 .catalog-search label { display: block; font-size: .875rem; font-weight: 650; margin-bottom: 5px; }
 .catalog-search input { width: 100%; min-height: 45px; padding: 8px 12px; color: var(--ink); background: var(--glass); border: 1px solid var(--line); border-radius: 10px; font: inherit; }
 .catalog-search input:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
-.grid { display: grid; align-items: start; gap: 15px; }
+.grid { display: grid; align-items: start; gap: 23px 30px; }
 .grid section { min-width: 0; }
-.category { background: var(--glass); border: 1px solid var(--line); border-radius: 16px; padding: 13px 14px; }
 .grid h2 {
   margin: 0 0 6px; padding-bottom: 8px; border-bottom: 1px solid var(--line);
   color: var(--mute); font-size: .875rem; font-weight: 650;
 }
 .tool-list { list-style: none; margin: 0; padding: 0; }
 .app {
-  display: grid; grid-template-columns: 42px minmax(0, 1fr); align-items: center; gap: 12px;
-  min-height: 60px; padding: 8px 6px; border-radius: 10px; text-decoration: none; color: inherit;
+  display: grid; grid-template-columns: 32px minmax(0, 1fr); align-items: center; gap: 9px;
+  min-height: 47px; padding: 5px 6px; border-radius: 8px; text-decoration: none; color: inherit;
 }
 .app:hover { background: var(--line); }
 .app:focus-visible, .tema-btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .icon {
-  width: 42px; height: 42px; display: grid; place-items: center;
-  background: var(--glass); border: 1px solid var(--line); border-radius: 11px;
+  width: 32px; height: 32px; display: grid; place-items: center;
+  background: var(--glass); border: 1px solid var(--line); border-radius: 7px;
 }
+.icon svg { width: 17px; height: 17px; }
 .label, .description { display: block; overflow-wrap: anywhere; }
 .label { font-size: .975rem; font-weight: 620; }
 .description { color: var(--mute); font-size: .83rem; line-height: 1.35; margin-top: 2px; }
