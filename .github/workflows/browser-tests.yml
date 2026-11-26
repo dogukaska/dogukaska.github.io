@@ -41,7 +41,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p "$DK_APPS_ROOT"
-          for app in belge foto metin-veri pdf-epub qr video; do
+          for app in belge ev foto metin-veri pdf-epub plan qr video; do
             if [ ! -d "$DK_APPS_ROOT/$app/.git" ]; then
               git clone --depth 1 "https://github.com/dogukaska/$app.git" "$DK_APPS_ROOT/$app"
             fi

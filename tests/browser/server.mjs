@@ -3,7 +3,7 @@ import { stat } from "node:fs/promises";
 import { createServer } from "node:http";
 import { extname, resolve, sep } from "node:path";
 
-const applications = new Set(["belge", "foto", "metin-veri", "pdf-epub", "qr", "video"]);
+const applications = new Set(["belge", "ev", "foto", "metin-veri", "pdf-epub", "plan", "qr", "video"]);
 const appsRoot = resolve(process.env.DK_APPS_ROOT || "..");
 const hub = resolve(".");
 const mime = {
