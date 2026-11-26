@@ -1,23 +1,23 @@
 // Yeni bir bağımsız aracı ilgili kategoriye ekle. icon, icons.js içindeki simge adı.
 export const CATEGORIES = [
   { id: "foto", name: "Fotoğraf", apps: [
-    { name: "Foto Araçları", desc: "Arka plan sil, dönüştür, sıkıştır", url: "/foto/", icon: "image" },
-    { name: "Görsel Gizle", desc: "Yüzleri bul, bulanıklaştır veya kapat", url: "/foto/gizle/", icon: "image" },
-    { name: "Hedef Boyuta Küçült", desc: "Görseli bir KB sınırına indir", url: "/foto/hedef-boyut/", icon: "image" },
+    { name: "Foto Araçları", desc: "Arka plan sil, dönüştür, sıkıştır", terms: "heic jpg jpeg png webp avif resim format arka plan", url: "/foto/", icon: "image" },
+    { name: "Görsel Gizle", desc: "Yüzleri bul, bulanıklaştır veya kapat", terms: "mozaik sansür fotoğraf karart", url: "/foto/gizle/", icon: "image" },
+    { name: "Hedef Boyuta Küçült", desc: "Görseli bir KB sınırına indir", terms: "fotoğraf sıkıştır dosya boyutu kb mb", url: "/foto/hedef-boyut/", icon: "image" },
   ] },
   { id: "video", name: "Video ve Ses", apps: [
-    { name: "Video Araçları", desc: "Ses çıkar, GIF yap", url: "/video/", icon: "video" },
-    { name: "Ses Kırp", desc: "Bir bölümü seç ve MP3 veya WAV indir", url: "/video/ses-kirp/", icon: "scissors" },
+    { name: "Video Araçları", desc: "Ses çıkar, GIF yap", terms: "mp3 wav hareketli resim gif", url: "/video/", icon: "video" },
+    { name: "Ses Kırp", desc: "Bir bölümü seç ve MP3 veya WAV indir", terms: "ses kes ses düzenle", url: "/video/ses-kirp/", icon: "scissors" },
   ] },
   { id: "belge", name: "Belge ve Kitap", apps: [
-    { name: "Belge Tarayıcı", desc: "Belgeyi tara, düzelt, PDF yap", url: "/belge/", icon: "scan" },
-    { name: "Kitap Çevirici", desc: "Türkçe PDF’yi EPUB’a dönüştür", url: "/pdf-epub/", icon: "book" },
-    { name: "PDF Düzenle", desc: "Sayfaları birleştir, sırala ve döndür", url: "/belge/pdf/", icon: "file" },
-    { name: "Metni Kopyala", desc: "Görselden Türkçe metin çıkar", url: "/belge/ocr/", icon: "scan" },
+    { name: "Belge Tarayıcı", desc: "Belgeyi tara, düzelt, PDF yap", terms: "kamera tarama pdf kitap", url: "/belge/", icon: "scan" },
+    { name: "Kitap Çevirici", desc: "Türkçe PDF’yi EPUB’a dönüştür", terms: "e kitap e-kitap dönüştür e okuyucu", url: "/pdf-epub/", icon: "book" },
+    { name: "PDF Düzenle", desc: "Sayfaları birleştir, sırala ve döndür", terms: "pdf birleştir pdf ayır sayfa çıkar", url: "/belge/pdf/", icon: "file" },
+    { name: "Metni Kopyala", desc: "Görselden Türkçe metin çıkar", terms: "ocr resimden yazı fotoğraftan metin", url: "/belge/ocr/", icon: "scan" },
   ] },
   { id: "kod", name: "QR ve Barkod", apps: [
-    { name: "QR Kod", desc: "Wi-Fi, IBAN ve kartvizit için QR oluştur", url: "/qr/", icon: "qr" },
-    { name: "QR Oku", desc: "Kameradan veya görselden QR oku", url: "/qr/oku/", icon: "scan" },
-    { name: "Barkod Oluştur", desc: "Code 128 ve EAN‑13 üret", url: "/qr/barkod/", icon: "file" },
+    { name: "QR Kod", desc: "Wi-Fi, IBAN ve kartvizit için QR oluştur", terms: "karekod whatsapp telefon konum bağlantı", url: "/qr/", icon: "qr" },
+    { name: "QR Oku", desc: "Kameradan veya görselden QR oku", terms: "karekod tara qr okut", url: "/qr/oku/", icon: "scan" },
+    { name: "Barkod Oluştur", desc: "Code 128 ve EAN‑13 üret", terms: "ean market ürün barkodu", url: "/qr/barkod/", icon: "file" },
   ] },
 ];

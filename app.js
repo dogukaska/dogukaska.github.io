@@ -1,4 +1,4 @@
-import { CATEGORIES } from "./apps.js?v=20261126c";
+import { CATEGORIES } from "./apps.js?v=20261126d";
 import { icon } from "./icons.js?v=20261125e";
 
 const grid = document.getElementById("grid");
@@ -30,6 +30,7 @@ for (const category of CATEGORIES) {
     description.textContent = app.desc;
     details.append(label, description);
     link.append(glyph, details);
+    row.dataset.search = [category.name, app.name, app.desc, app.terms].join(" ");
     row.append(link);
     list.append(row);
   }
