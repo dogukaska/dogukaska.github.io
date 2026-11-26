@@ -30,6 +30,8 @@ test("katalog ve uygulama girişleri dar ekranda açılır", async ({ page, base
 test("büyüteç aramayı açar ve kapatınca araç listesi geri gelir", async ({ page }) => {
   await page.goto("/");
   const toggle = page.getByRole("button", { name: "Araç ara" });
+  await expect(page.locator(".page-actions > button")).toHaveCount(3);
+  await expect(page.locator(".page-actions > button").first()).toHaveAccessibleName("Araç ara");
   const input = page.getByRole("searchbox", { name: "Araç ara", includeHidden: true });
   const links = page.getByRole("navigation", { name: "Araçlar" }).getByRole("link");
   await expect(links.first()).toBeVisible();

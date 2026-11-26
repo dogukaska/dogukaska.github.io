@@ -23,9 +23,9 @@
     <label>Oda eni (cm)<input id="room-width" type="number" min="50" max="2000" value="420"></label>
     <label>Oda boyu (cm)<input id="room-height" type="number" min="50" max="2000" value="330"></label>
     <label>Kapı eni (cm)<input id="door-width" type="number" min="0" max="300" value="85"></label>
-    <label>Kapının sol köşeden uzaklığı (cm)<input id="door-offset" type="number" min="0" max="2000" value="20"></label>
+    <label>Kapı konumu (cm)<input id="door-offset" type="number" min="0" max="2000" value="20" aria-describedby="door-help"></label>
   </div>
-  <p class="muted">Kapı alt duvarda gösterilir. Kapı genişliğini 0 yaparak gizleyebilirsin.</p>
+  <p class="muted" id="door-help">Kapı konumu alt duvarın sol köşesinden ölçülür. Kapı enini 0 yaparak gizleyebilirsin.</p>
 </section>
 <form id="furniture" class="panel">
   <div class="fields">

@@ -41,16 +41,10 @@ header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
 .brand-icon { flex: none; border-radius: 10px; }
 h1 { margin: 0; font-size: clamp(2rem, 6vw, 3rem); font-weight: 650; line-height: 1.1; letter-spacing: -0.05em; }
 
-.search-toggle {
-  flex: none; width: 36px; height: 36px; margin-inline-start: auto; padding: 0;
-  place-items: center; color: inherit; background: var(--glass);
-  border: 1px solid var(--line); border-radius: 50%; cursor: pointer;
-}
-.search-toggle:not([hidden]) { display: grid; }
-.search-toggle:hover, .search-toggle[aria-expanded="true"] { background: var(--line); }
+.page-actions .search-toggle:hover, .page-actions .search-toggle[aria-expanded="true"] { background: var(--line); }
 .catalog-search { max-width: 360px; margin: 0 0 20px auto; }
 .catalog-search input { width: 100%; min-height: 36px; padding: 6px 10px; color: var(--ink); background: var(--glass); border: 1px solid var(--line); border-radius: 8px; font: inherit; }
-.catalog-search input:focus-visible, .search-toggle:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.catalog-search input:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .grid { display: grid; align-items: start; gap: 23px 30px; }
 .grid section { min-width: 0; }
 .grid h2 {

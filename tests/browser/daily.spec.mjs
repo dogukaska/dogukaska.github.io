@@ -32,6 +32,9 @@ test("tarif kesirleri ölçeklenir ve kayıt sayfa yenilenince geri gelir", asyn
 
 test("oda planı kapı alanını denetler ve PNG verir", async ({ page }) => {
   await page.goto("/ev/yerlesim/");
+  const doorWidth = await page.locator("#door-width").boundingBox();
+  const doorOffset = await page.getByLabel("Kapı konumu (cm)").boundingBox();
+  expect(doorOffset?.y).toBe(doorWidth?.y);
   await page.getByRole("button", { name: "Mobilyayı ekle" }).click();
   await expect(page.getByRole("status")).toContainText("bu konuma sığıyor");
   await page.locator("#item-x").fill("20");
