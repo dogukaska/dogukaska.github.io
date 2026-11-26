@@ -38,6 +38,5 @@ export const CATEGORIES = [
   ] },
   { id: "plan", name: "Planlama", apps: [
     { name: "Vardiyayı Takvime Aktar", desc: "Nöbet döngünü oluştur ve takvim dosyası indir", terms: "vardiya nöbet takvim ics gündüz gece izin", url: "/plan/vardiya/", icon: "file" },
-    { name: "Ne Zaman Buluşalım?", desc: "Saat seçeneklerini paylaş ve yanıtları topla", terms: "grup anket etkinlik buluşma whatsapp uygunluk oylama", url: "/plan/bulusma/", icon: "note" },
   ] },
 ];
