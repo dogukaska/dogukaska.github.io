@@ -1,0 +1,13 @@
+{
+  "name": "x-notes",
+  "short_name": "x-notes",
+  "description": "Tarayıcıda saklanan kişisel not defteri",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "lang": "tr",
+  "background_color": "#efede8",
+  "theme_color": "#efede8",
+  "icons": [{"src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"}]
+}

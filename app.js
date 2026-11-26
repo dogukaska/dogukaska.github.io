@@ -1,5 +1,5 @@
-import { CATEGORIES } from "./apps.js?v=20261126e";
-import { icon } from "./icons.js?v=20261125e";
+import { CATEGORIES } from "./apps.js?v=20261126f";
+import { icon } from "./icons.js?v=20261126f";
 
 const grid = document.getElementById("grid");
 for (const category of CATEGORIES) {

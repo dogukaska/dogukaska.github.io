@@ -1,5 +1,8 @@
 // Yeni bir bağımsız aracı ilgili kategoriye ekle. icon, icons.js içindeki simge adı.
 export const CATEGORIES = [
+  { id: "not", name: "Notlar", apps: [
+    { name: "x-notes", desc: "Yerel notlar, kategori profilleri ve yanıtlar", terms: "not defteri günlük giderler metin fikir", url: "/x-notes/", icon: "note" },
+  ] },
   { id: "foto", name: "Fotoğraf", apps: [
     { name: "Foto Araçları", desc: "Arka plan sil, dönüştür, sıkıştır", terms: "heic jpg jpeg png webp avif resim format arka plan", url: "/foto/", icon: "image" },
     { name: "Görsel Gizle", desc: "Yüzleri bul, bulanıklaştır veya kapat", terms: "mozaik sansür fotoğraf karart", url: "/foto/gizle/", icon: "image" },
