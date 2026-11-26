@@ -37,14 +37,20 @@ body {
 }
 main { max-width: 970px; margin: 0 auto; padding: clamp(44px, 8vw, 82px) clamp(18px, 5vw, 40px) 44px; }
 .catalog-page main { padding-top: clamp(68px, 8vw, 82px); }
-header { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; padding-right: 42px; }
+header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
 .brand-icon { flex: none; border-radius: 10px; }
 h1 { margin: 0; font-size: clamp(2rem, 6vw, 3rem); font-weight: 650; line-height: 1.1; letter-spacing: -0.05em; }
 
-.catalog-search { margin: 0 0 24px; max-width: 480px; }
-.catalog-search label { display: block; font-size: .875rem; font-weight: 650; margin-bottom: 5px; }
-.catalog-search input { width: 100%; min-height: 45px; padding: 8px 12px; color: var(--ink); background: var(--glass); border: 1px solid var(--line); border-radius: 10px; font: inherit; }
-.catalog-search input:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.search-toggle {
+  flex: none; width: 36px; height: 36px; margin-inline-start: auto; padding: 0;
+  place-items: center; color: inherit; background: var(--glass);
+  border: 1px solid var(--line); border-radius: 50%; cursor: pointer;
+}
+.search-toggle:not([hidden]) { display: grid; }
+.search-toggle:hover, .search-toggle[aria-expanded="true"] { background: var(--line); }
+.catalog-search { max-width: 360px; margin: 0 0 20px auto; }
+.catalog-search input { width: 100%; min-height: 36px; padding: 6px 10px; color: var(--ink); background: var(--glass); border: 1px solid var(--line); border-radius: 8px; font: inherit; }
+.catalog-search input:focus-visible, .search-toggle:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .grid { display: grid; align-items: start; gap: 23px 30px; }
 .grid section { min-width: 0; }
 .grid h2 {
