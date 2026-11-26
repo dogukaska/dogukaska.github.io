@@ -73,3 +73,20 @@ test("not kaydı sayfa yenilemesinden sonra kalır", async ({ page }) => {
   await page.locator("#open-drawer").click();
   await expect(page.locator("#profile-drawer")).toBeVisible();
 });
+
+test("altı araç iki sütunda görünür ve arama gizli araçları da bulur", async ({ page }) => {
+  await page.goto("/");
+  const category = page.getByRole("region", { name: "Belge ve Kitap" });
+  await expect(category.getByRole("link")).toHaveCount(6);
+  const list = category.getByRole("list");
+  expect(await list.evaluate(el => getComputedStyle(el).gridTemplateColumns.split(" ").length)).toBe(2);
+  const more = category.getByRole("button", { name: "Diğer araçları gör" });
+  await more.click();
+  await expect(category.getByRole("link", { name: /PDF Ayır/ })).toBeVisible();
+  await category.getByRole("button", { name: "Daha az göster" }).click();
+  await expect(category.getByRole("link")).toHaveCount(6);
+  await page.getByRole("button", { name: "Araç ara" }).click();
+  await page.getByRole("searchbox", { name: "Araç ara" }).fill("filigran");
+  await expect(category.getByRole("link", { name: /PDF Filigran/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Görsele Filigran/ })).toBeVisible();
+});

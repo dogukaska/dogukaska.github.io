@@ -73,3 +73,16 @@ h1 { margin: 0; font-size: clamp(2rem, 6vw, 3rem); font-weight: 650; line-height
   body .tema-btn { transition: none; }
 }
 
+
+.catalog-page .tool-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3px 6px; }
+.catalog-page .tool-list li { min-width: 0; }
+.catalog-page .app { grid-template-columns: 24px minmax(0, 1fr); align-items: start; gap: 6px; padding: 6px 3px; }
+.catalog-page .icon { width: 24px; height: 24px; }
+.catalog-page .icon svg { width: 14px; height: 14px; }
+.catalog-page .label { font-size: .88rem; line-height: 1.2; }
+.catalog-page .description { font-size: .73rem; line-height: 1.25; }
+.category-more {
+  margin-top: 7px; min-height: 34px; padding: 4px 8px; font: inherit; font-size: .8rem;
+  color: var(--ink); border: 1px solid var(--line); border-radius: 7px; background: var(--glass); cursor: pointer;
+}
+.category-more:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
