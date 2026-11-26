@@ -30,3 +30,5 @@ Linux WebKit testi mobil sayfa düzenini kapsar. Fiziksel iPhone kamerası, odak
 - Taranan bir sayfayı aç, köşelerini elle düzelt ve PDF önizlemesinde sonucun korunduğunu kontrol et.
 - Kitap tararken son sayfayı arka kapak yap, ardından iç sayfaya geri çevir. Kaydı yeniden açıp son durumu ve EPUB aktarımını doğrula.
 - iPhone'da kaydedilmiş bir MOV dosyasını Sesi Yazıya Çevir aracında aç. Türkçe konuşmanın çıktıda görüldüğünü ve TXT indirmesini kontrol et.
+
+Dijital Çakı’nın araç kataloğu ve ortak tarayıcı testleri OpenAI Codex desteğiyle geliştirildi.
