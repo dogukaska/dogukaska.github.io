@@ -1,20 +1,37 @@
-import { APPS } from "./apps.js?v=20261125e";
+import { CATEGORIES } from "./apps.js?v=20261126a";
 import { icon } from "./icons.js?v=20261125e";
 
 const grid = document.getElementById("grid");
-for (const a of APPS) {
-  const el = document.createElement("a");
-  el.className = "app";
-  el.href = a.url;
-  el.title = a.desc || a.name;
-  const tile = document.createElement("span");
-  tile.className = "icon glass";
-  tile.innerHTML = icon(a.icon, 30);
-  const label = document.createElement("span");
-  label.className = "label";
-  label.textContent = a.name;
-  el.append(tile, label);
-  grid.append(el);
+for (const category of CATEGORIES) {
+  if (!category.apps.length) continue;
+  const section = document.createElement("section");
+  const heading = document.createElement("h2");
+  heading.id = `category-${category.id}`;
+  heading.textContent = category.name;
+  section.setAttribute("aria-labelledby", heading.id);
+  const list = document.createElement("ul");
+  list.className = "tool-list";
+  list.setAttribute("role", "list");
+  for (const app of category.apps) {
+    const row = document.createElement("li");
+    const link = document.createElement("a");
+    link.className = "app";
+    link.href = app.url;
+    const glyph = document.createElement("span");
+    glyph.className = "icon";
+    glyph.innerHTML = icon(app.icon, 21);
+    const details = document.createElement("span");
+    const label = document.createElement("span");
+    label.className = "label";
+    label.textContent = app.name;
+    const description = document.createElement("span");
+    description.className = "description";
+    description.textContent = app.desc;
+    details.append(label, description);
+    link.append(glyph, details);
+    row.append(link);
+    list.append(row);
+  }
+  section.append(heading, list);
+  grid.append(section);
 }
-
-document.getElementById("today").textContent = new Date().toLocaleDateString("tr-TR", { weekday: "long", day: "numeric", month: "long" });
