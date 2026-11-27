@@ -91,13 +91,11 @@ test("altı araç iki sütunda görünür ve arama gizli araçları da bulur", a
   await expect(page.getByRole("link", { name: /Görsele Filigran/ })).toBeVisible();
 });
 
-test("görsel ve büyük dosya paylaşımı ayrı kategorilerde açılır", async ({ page }) => {
+test("Görsel Paylaş ve Arşiv Açıcı katalogda açılır", async ({ page }) => {
   await page.goto("/");
   const photo = page.getByRole("region", { name: "Fotoğraf", exact: true });
   await expect(photo.getByRole("link", { name: /Görsel Paylaş/ })).toHaveAttribute("href", "/foto/paylas/");
   const files = page.getByRole("region", { name: "Dosya", exact: true });
-  await files.getByRole("link", { name: /Dosya Paylaş/ }).click();
-  await expect(page.getByRole("heading", { name: "Dosya Paylaş", exact: true })).toBeVisible();
-  await expect(page.getByLabel("Plik sunucusu")).toBeVisible();
-  await expect(page.getByText("Gönderi başına toplam 15 GB")).toBeVisible();
+  await expect(files.getByRole("link", { name: /Arşiv Açıcı/ })).toHaveAttribute("href", "/dosya/arsiv/");
+  await expect(page.locator('a[href="/dosya/paylas/"]')).toHaveCount(0);
 });
