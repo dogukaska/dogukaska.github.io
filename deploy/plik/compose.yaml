@@ -21,6 +21,8 @@ services:
     restart: unless-stopped
     environment:
       PLIK_DOMAIN: ${PLIK_DOMAIN:?Set the public Plik hostname}
+      NO_PROXY: plik,localhost,127.0.0.1
+      no_proxy: plik,localhost,127.0.0.1
     ports:
       - "80:80"
       - "443:443"
