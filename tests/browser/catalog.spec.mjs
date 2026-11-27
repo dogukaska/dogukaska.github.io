@@ -90,3 +90,14 @@ test("altı araç iki sütunda görünür ve arama gizli araçları da bulur", a
   await expect(category.getByRole("link", { name: /PDF Filigran/ })).toBeVisible();
   await expect(page.getByRole("link", { name: /Görsele Filigran/ })).toBeVisible();
 });
+
+test("görsel ve büyük dosya paylaşımı ayrı kategorilerde açılır", async ({ page }) => {
+  await page.goto("/");
+  const photo = page.getByRole("region", { name: "Fotoğraf", exact: true });
+  await expect(photo.getByRole("link", { name: /Görsel Paylaş/ })).toHaveAttribute("href", "/foto/paylas/");
+  const files = page.getByRole("region", { name: "Dosya", exact: true });
+  await files.getByRole("link", { name: /Dosya Paylaş/ }).click();
+  await expect(page.getByRole("heading", { name: "Dosya Paylaş", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "SwissTransfer’ı aç", exact: true })).toHaveAttribute("href", "https://www.swisstransfer.com/en");
+  await expect(page.getByText(/gönderide toplam 50 GB/)).toBeVisible();
+});

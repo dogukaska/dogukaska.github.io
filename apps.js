@@ -8,7 +8,7 @@ export const CATEGORIES = [
     { name: "Görsel Gizle", desc: "Yüzleri bul ve gizle", terms: "mozaik sansür fotoğraf karart", url: "/foto/gizle/", icon: "image" },
     { name: "Hedef Boyuta Küçült", desc: "KB sınırına indir", terms: "fotoğraf sıkıştır dosya boyutu kb mb", url: "/foto/hedef-boyut/", icon: "image" },
     { name: "Görsele Filigran", desc: "Metin veya logo ekle", terms: "jpg png gif filigran damga", url: "/foto/studyo/?arac=filigran", icon: "image" },
-    { name: "Orijinal Görsel Paylaş", desc: "Görseli link veya QR ile gönder", terms: "resim paylaş orijinal kalite qr link sıkıştırmasız gönder", url: "/foto/paylas/", icon: "image" },
+    { name: "Görsel Paylaş", desc: "100 MB’a kadar görseli link veya QR ile gönder", terms: "resim paylaş orijinal kalite qr link sıkıştırmasız gönder", url: "/foto/paylas/", icon: "image" },
   ] },
   { id: "video", name: "Video ve Ses", apps: [
     { name: "Video Araçları", desc: "Ses çıkar, GIF yap", terms: "mp3 wav hareketli resim gif", url: "/video/", icon: "video" },
@@ -40,6 +40,7 @@ export const CATEGORIES = [
   ] },
   { id: "dosya", name: "Dosya", apps: [
     { name: "Arşiv Açıcı", desc: "ZIP, RAR ve 7z dosyalarının içini aç", terms: "arşiv sıkıştırma çıkart unzip winrar parola", url: "/dosya/arsiv/", icon: "file" },
+    { name: "Dosya Paylaş", desc: "Büyük dosyaları 50 GB’a kadar gönder", terms: "büyük dosya paylaş yükle swisstransfer wetransfer filemail ücret hesap", url: "/dosya/paylas/", icon: "file" },
   ] },
   { id: "ev", name: "Ev", apps: [
     { name: "Odaya Sığar mı?", desc: "Mobilya ve kapı ölçüleriyle oda yerleşimini çiz", terms: "oda planı koltuk mobilya boyut yerleşim santimetre", url: "/ev/yerlesim/", icon: "image" },
