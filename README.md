@@ -17,3 +17,5 @@ Dosya Paylaşımı aracının katalog ve tarayıcı testleri OpenAI Codex deste�
 [Hesaplama kategorisinin](https://dogukaska.github.io/hesapkitap/) [kaynak kodu ve hesaplama testleri](https://github.com/dogukaska/hesapkitap) OpenAI Codex desteğiyle kendi deposuna taşındı.
 
 Katalogdaki araçların ekran genişliklerine göre form yerleşimi kontrolleri OpenAI Codex desteğiyle eklendi.
+
+Kargo Desisi, TV ve Monitör Ölçüsü, Fotoğraf Baskı Boyutu, Metrekare ve Malzeme Adedi ile İş Günü Hesabı katalog ve tarayıcı denetimleri OpenAI Codex desteğiyle eklendi.

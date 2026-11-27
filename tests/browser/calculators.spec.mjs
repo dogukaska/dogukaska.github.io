@@ -36,7 +36,7 @@ for (const [width, colorScheme] of [[320, "light"], [393, "dark"], [430, "dark"]
     await page.emulateMedia({ colorScheme });
     await page.goto("/hesapkitap/");
     const list = page.getByRole("navigation", { name: "Hesaplama araçları" });
-    await expect(list.getByRole("link")).toHaveCount(12);
+    await expect(list.getByRole("link")).toHaveCount(14);
     const routes = await list.getByRole("link").evaluateAll((links) => links.map((link) => link.href));
 
     for (const route of routes) {

@@ -1,4 +1,4 @@
-import { CALCULATORS } from "./hesapkitap/catalog.js?v=1";
+import { CALCULATORS } from "./hesapkitap/catalog.js?v=2";
 
 // Yeni bir bağımsız aracı ilgili kategoriye ekle. icon, icons.js içindeki simge adı.
 export const CATEGORIES = [
@@ -10,6 +10,7 @@ export const CATEGORIES = [
     { name: "Görsel Gizle", desc: "Yüzleri bul ve gizle", terms: "mozaik sansür fotoğraf karart", url: "/foto/gizle/", icon: "image" },
     { name: "Hedef Boyuta Küçült", desc: "KB sınırına indir", terms: "fotoğraf sıkıştır dosya boyutu kb mb", url: "/foto/hedef-boyut/", icon: "image" },
     { name: "Görsele Filigran", desc: "Metin veya logo ekle", terms: "jpg png gif filigran damga", url: "/foto/studyo/?arac=filigran", icon: "image" },
+    { name: "Fotoğraf Baskı Boyutu", desc: "Piksel ve santimetre arasında hesapla", terms: "baskı fotoğraf ölçü ppi dpi piksel çözünürlük", url: "/foto/baski-boyutu/", icon: "image" },
   ] },
   { id: "video", name: "Video ve Ses", apps: [
     { name: "Video Araçları", desc: "Ses çıkar, GIF yap", terms: "mp3 wav hareketli resim gif", url: "/video/", icon: "video" },
@@ -53,8 +54,10 @@ export const CATEGORIES = [
     { name: "Boya Alış Listesi", desc: "Duvara gereken boya kutularını hesapla", terms: "boya metrekare litre duvar dekorasyon", url: "/ev/araclar/?arac=boya", icon: "file" },
     { name: "Sayaç Okuma Defteri", desc: "Endeks kaydet, tüketimi karşılaştır", terms: "elektrik su doğalgaz sayaç enerji kwh endeks csv", url: "/ev/araclar/?arac=sayac", icon: "file" },
     { name: "Tarif Kartı", desc: "Tarif sakla ve porsiyonu değiştir", terms: "yemek malzeme porsiyon mutfak tarif ölçü", url: "/ev/tarif/", icon: "book" },
+    { name: "Metrekare ve Malzeme Adedi", desc: "Zemin alanını ve paket sayısını bul", terms: "metrekare alan fayans seramik parke fire paket", url: "/ev/metrekare/", icon: "file" },
   ] },
   { id: "plan", name: "Planlama", apps: [
     { name: "Vardiyayı Takvime Aktar", desc: "Nöbet döngünü oluştur ve takvim dosyası indir", terms: "vardiya nöbet takvim ics gündüz gece izin", url: "/plan/vardiya/", icon: "file" },
+    { name: "İş Günü Hesabı", desc: "Tatile ve hafta sonuna uğramadan tarih bul", terms: "iş günü hafta içi tarih ekle çıkar tatil mesai", url: "/plan/is-gunu/", icon: "note" },
   ] },
 ];
