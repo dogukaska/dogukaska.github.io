@@ -249,3 +249,48 @@ test("eski Tarif Kartı bağlantısı yeni konumda aynı kayıtları açar", asy
   await page.locator("#recipes").selectOption({ label: "Eski kek" });
   await expect(page.locator("#ingredient-view")).toContainText("100 g un");
 });
+
+test("eşya kataloğu Türkçe arama yapar ve modelin değiştirilebilir ölçülerini doldurur", async ({ page }) => {
+  await page.goto("/ev/yerlesim/");
+  await expect(page.locator("#new-model optgroup")).toHaveCount(8);
+  expect(await page.locator("#new-model optgroup option").count()).toBeGreaterThan(100);
+  const search = page.getByRole("searchbox", { name: "Eşya ara" });
+  await search.fill("cerceve");
+  await expect(page.locator("#catalog-info")).toContainText("1 eşya bulundu");
+  await search.press("Enter");
+  await expect(page.locator("#new-model")).toHaveValue("picture");
+  await expect(page.locator("#name")).toHaveValue("Duvar tablosu");
+  await expect(page.locator("#height")).toHaveValue("5");
+  await expect(page.locator("#base-new")).toHaveValue("145");
+  await page.locator("#width").fill("64");
+  await page.getByRole("button", { name: "Mobilyayı ekle" }).click();
+  await page.getByRole("button", { name: "3D önizleme" }).click();
+  await expect(page.locator("#item-elevation")).toHaveValue("55");
+  await expect(page.locator("#item-base")).toHaveValue("145");
+  await page.reload();
+  await expect(page.locator("#item-model")).toHaveValue("picture");
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("dijital-caki-oda-1")).items[0]);
+  expect(saved.width).toBe(64);
+  await search.fill("tv");
+  await page.locator("#new-model").selectOption("wall-tv");
+  await expect(page.locator("#base-new")).toHaveValue("105");
+  await expect(page.locator("#name")).toHaveValue("Duvar tipi televizyon");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(await page.evaluate(() => innerWidth));
+});
+
+test("halı mobilyanın altında kalır ve L koltuğun boş köşesi çakışmaz", async ({ page }) => {
+  await page.goto("/ev/yerlesim/");
+  await page.evaluate(() => {
+    const items = [
+      { id: "sofa", name: "L koltuk", model: "sectional", x: 50, y: 60, width: 250, height: 175, elevation: 85 },
+      { id: "rug", name: "Halı", model: "rug", x: 25, y: 35, width: 290, height: 250, elevation: 2 },
+      { id: "table", name: "Sehpa", model: "coffee-table", x: 85, y: 155, width: 65, height: 45, elevation: 43 },
+    ];
+    localStorage.setItem("dijital-caki-oda-1", JSON.stringify({ width: 440, height: 360, offset: 0, door: 0, items }));
+  });
+  await page.reload();
+  await expect(page.getByRole("status")).toHaveText("Sehpa bu konuma sığıyor.");
+  await page.locator("#item-x").fill("210");
+  await page.locator("#item-x").press("Tab");
+  await expect(page.getByRole("status")).toContainText("başka bir mobilyayla örtüşüyor");
+});
