@@ -312,12 +312,15 @@ test("yeni koli yukarıdan düşer ve kodu çizimlerin önünde kalır", async (
   const scene = page.locator("#stacks-scene");
   await expect(scene.getByRole("button", { name: "MUTFAK-01" })).toBeVisible();
   await expect(scene.locator(":scope > g:last-child text")).toHaveText("MUTFAK-01");
+  expect(await scene.evaluate(node => node.parentElement === document.body)).toBe(true);
+  expect(await scene.evaluate(node => node.getBoundingClientRect().height >= document.documentElement.clientHeight)).toBe(true);
   const animation = await page.evaluate(() => window.cartonAnimations[0]);
   expect(animation[0].transform).toContain("-85px");
   expect(animation.at(-1).transform).not.toContain("-85px");
 });
 
-test("koliler serbest taşınır, yamuk istiflenir ve desteksiz kalınca kayar", async ({ page }) => {
+test("koliler sayfada başlığın yanına taşınır, köşeden döner ve desteksizse kayar", async ({ page }) => {
+  await page.setViewportSize({ width: 1400, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/ev/araclar/?arac=kutu");
   for (let index = 1; index <= 3; index++) {
@@ -332,14 +335,14 @@ test("koliler serbest taşınır, yamuk istiflenir ve desteksiz kalınca kayar",
   const second = await box(2).getAttribute("data-box-id");
   const third = await box(3).getAttribute("data-box-id");
   await page.evaluate(({ first, second, third }) => {
-    localStorage.setItem("dijital-caki-koli-duzeni-2", JSON.stringify([
-      { id: first, x: 400, y: 302, angle: 0 },
-      { id: second, x: 144, y: 140, angle: -12 },
-      { id: third, x: 135, y: 316, angle: 8 },
-    ]));
+    localStorage.setItem("dijital-caki-koli-duzeni-3", JSON.stringify({ width: 1400, placements: [
+      { id: first, x: 160, y: 302, angle: 0 },
+      { id: second, x: 95, y: 140, angle: -12 },
+      { id: third, x: 135, y: 560, angle: 8 },
+    ] }));
   }, { first, second, third });
   await page.reload();
-  await scene.scrollIntoViewIfNeeded();
+  await page.evaluate(() => window.scrollTo(0, 0));
 
   const drag = async (locator, x, y) => {
     const start = await locator.evaluate(node => {
@@ -357,23 +360,33 @@ test("koliler serbest taşınır, yamuk istiflenir ve desteksiz kalınca kayar",
     await page.mouse.up();
   };
 
-  await drag(box(2), 423, 263);
+  await drag(box(2), 183, 263);
   await expect(box(2)).toHaveAttribute("data-support", first);
-  expect(Math.abs(Number(await box(2).getAttribute("data-x")) - 423)).toBeLessThan(3);
+  expect(Math.abs(Number(await box(2).getAttribute("data-x")) - 183)).toBeLessThan(3);
   await expect(box(2)).toHaveAttribute("data-angle", "-12");
-  await drag(box(2), 464, 264);
+  await drag(box(2), 224, 264);
   await expect(box(2)).toHaveAttribute("data-support", "");
-  expect(Number(await box(2).getAttribute("data-x"))).toBeGreaterThan(480);
+  expect(Number(await box(2).getAttribute("data-x"))).toBeGreaterThan(240);
   expect(Number(await box(2).getAttribute("data-y"))).toBeGreaterThan(302);
-  await drag(box(2), 576, 114);
-  expect(Math.abs(Number(await box(2).getAttribute("data-x")) - 576)).toBeLessThan(3);
-  expect(Math.abs(Number(await box(2).getAttribute("data-y")) - 114)).toBeLessThan(3);
+  const header = await page.getByRole("heading", { name: "Taşınma Kutusu Bulucu", exact: true }).boundingBox();
+  const headerY = header.y + header.height / 2;
+  await drag(box(2), 1190, headerY);
+  expect(Math.abs(Number(await box(2).getAttribute("data-x")) - 1190)).toBeLessThan(3);
+  expect(Math.abs(Number(await box(2).getAttribute("data-y")) - headerY)).toBeLessThan(3);
+  await expect(page.getByRole("button", { name: "Sağa döndür" })).toHaveCount(0);
   const beforeRotate = Number(await box(2).getAttribute("data-angle"));
-  await page.getByRole("button", { name: "Sağa döndür" }).click();
-  await expect(box(2)).toHaveAttribute("data-angle", String(beforeRotate + 12));
+  const handle = await box(2).locator("[data-box-corner]").first().boundingBox();
+  const start = { x: handle.x + handle.width / 2, y: handle.y + handle.height / 2 };
+  const center = { x: Number(await box(2).getAttribute("data-x")), y: Number(await box(2).getAttribute("data-y")) };
+  await page.mouse.move(start.x, start.y);
+  await page.mouse.down();
+  await page.mouse.move(center.x - (start.y - center.y), center.y + (start.x - center.x), { steps: 10 });
+  await page.mouse.up();
+  const rotated = Number(await box(2).getAttribute("data-angle"));
+  expect(Math.abs(rotated - beforeRotate - 90)).toBeLessThan(5);
   await page.reload();
-  await expect(box(2)).toHaveAttribute("data-angle", String(beforeRotate + 12));
-  expect(Math.abs(Number(await box(2).getAttribute("data-x")) - 576)).toBeLessThan(3);
+  await expect(box(2)).toHaveAttribute("data-angle", String(rotated));
+  expect(Math.abs(Number(await box(2).getAttribute("data-x")) - 1190)).toBeLessThan(3);
   await page.getByRole("searchbox").fill("çay");
   await expect(box(2)).toHaveAttribute("aria-pressed", "true");
   await expect(box(1)).toHaveAttribute("opacity", "0.36");
