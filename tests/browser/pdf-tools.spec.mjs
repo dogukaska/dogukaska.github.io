@@ -166,7 +166,7 @@ test("PDF küçültme dosyayı büyütmez ve kayıpsız mod metni korur", async 
   expect((await pageText(page, out.bytes))[1]).toContain("Ikinci sayfa");
 });
 
-test("GIF filigranı hareketi ve kare sürelerini korur, meme şablonu PNG üretir", async ({ page }) => {
+test("GIF filigranı hareketi ve kare sürelerini korur", async ({ page }) => {
   const source = Buffer.from("R0lGODlhYABAAIEAAMgoMgAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwECAAAh+QQAEAAAACwAAAAAYABAAAAIgAABCBxIsKDBgwgTKlzIsKHDhxAjSpxIsaLFixgzatzIsaPHjyBDihxJsqTJkyhTqlzJsqXLlzBjypxJs6bNmzhz6tzJs6fPn0CDCh1KtKjRo0iTKl3KtKnTp1CjSp1KtarVq1izat3KtavXr2DDih1LtqzZs2jTql3Ltq3bkwEBACH5BAEYAAEALAAAAABgAEAAgSha3AAAAAAAAAAAAAiAAAEIHEiwoMGDCBMqXMiwocOHECNKnEixosWLGDNq3Mixo8ePIEOKHEmypMmTKFOqXMmypcuXMGPKnEmzps2bOHPq3Mmzp8+fQIMKHUq0qNGjSJMqXcq0qdOnUKNKnUq1qtWrWLNq3cq1q9evYMOKHUu2rNmzaNOqXcu2rduTAQEAOw==", "base64");
   await page.goto("/foto/studyo/?arac=filigran");
   await page.locator("#file").setInputFiles({ buffer: source, name: "ornek.gif", mimeType: "image/gif" });
@@ -180,8 +180,4 @@ test("GIF filigranı hareketi ve kare sürelerini korur, meme şablonu PNG üret
     return decompressFrames(parsed, true).map(frame => frame.delay);
   }, [...out.bytes]);
   expect(frames).toEqual([160, 240]);
-  await page.goto("/foto/studyo/?arac=meme");
-  await page.locator("#template").selectOption("expect");
-  const image = await download(page, "Görseli indir");
-  expect(image.bytes.subarray(1, 4).toString()).toBe("PNG");
 });

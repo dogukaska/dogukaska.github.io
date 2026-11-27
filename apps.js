@@ -8,7 +8,6 @@ export const CATEGORIES = [
     { name: "Görsel Gizle", desc: "Yüzleri bul ve gizle", terms: "mozaik sansür fotoğraf karart", url: "/foto/gizle/", icon: "image" },
     { name: "Hedef Boyuta Küçült", desc: "KB sınırına indir", terms: "fotoğraf sıkıştır dosya boyutu kb mb", url: "/foto/hedef-boyut/", icon: "image" },
     { name: "Görsele Filigran", desc: "Metin veya logo ekle", terms: "jpg png gif filigran damga", url: "/foto/studyo/?arac=filigran", icon: "image" },
-    { name: "Meme Oluştur", desc: "Şablon ve yazı ekle", terms: "meme caps görsel şablon", url: "/foto/studyo/?arac=meme", icon: "image" },
   ] },
   { id: "video", name: "Video ve Ses", apps: [
     { name: "Video Araçları", desc: "Ses çıkar, GIF yap", terms: "mp3 wav hareketli resim gif", url: "/video/", icon: "video" },
