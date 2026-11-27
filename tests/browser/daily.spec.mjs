@@ -295,45 +295,88 @@ test("halı mobilyanın altında kalır ve L koltuğun boş köşesi çakışmaz
   await expect(page.getByRole("status")).toContainText("başka bir mobilyayla örtüşüyor");
 });
 
-test("3D koliler kenarda istiflenir, başka bir yığına taşınır ve düzen saklanır", async ({ page }) => {
+test("yeni koli yukarıdan düşer ve kodu çizimlerin önünde kalır", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.addInitScript(() => {
+    window.cartonAnimations = [];
+    const original = SVGElement.prototype.animate;
+    SVGElement.prototype.animate = function (frames, options) {
+      if (this.matches("[data-box-id]")) window.cartonAnimations.push(frames);
+      return original.call(this, frames, options);
+    };
+  });
   await page.goto("/ev/araclar/?arac=kutu");
-  for (let index = 1; index <= 4; index++) {
+  await page.getByLabel("Kutu kodu").fill("MUTFAK-01");
+  await page.getByLabel("İçindekiler").fill("Çay ve kupalar");
+  await page.getByRole("button", { name: "Kutuyu kaydet" }).click();
+  const scene = page.locator("#stacks-scene");
+  await expect(scene.getByRole("button", { name: "MUTFAK-01" })).toBeVisible();
+  await expect(scene.locator(":scope > g:last-child text")).toHaveText("MUTFAK-01");
+  const animation = await page.evaluate(() => window.cartonAnimations[0]);
+  expect(animation[0].transform).toContain("-85px");
+  expect(animation.at(-1).transform).not.toContain("-85px");
+});
+
+test("koliler serbest taşınır, yamuk istiflenir ve desteksiz kalınca kayar", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/ev/araclar/?arac=kutu");
+  for (let index = 1; index <= 3; index++) {
     await page.getByLabel("Kutu kodu").fill("KUTU-" + index);
-    await page.getByLabel("İçindekiler").fill(index === 4 ? "Çay ve kupalar" : "Kitap");
+    await page.getByLabel("İçindekiler").fill(index === 2 ? "Çay ve kupalar" : "Kitap");
     await page.getByRole("button", { name: "Kutuyu kaydet" }).click();
     await expect(page.locator("#stacks-scene [data-box-id]")).toHaveCount(index);
   }
   const scene = page.locator("#stacks-scene");
   const box = number => scene.getByRole("button", { name: "KUTU-" + number, exact: true });
-  await expect(box(3)).toHaveAttribute("data-level", "2");
-  await expect(box(4)).toHaveAttribute("data-row", "1");
-  await expect(box(4).locator("text")).toHaveText("KUTU-4");
-  await scene.scrollIntoViewIfNeeded();
-  const center = async locator => locator.evaluate(node => {
-    const points = node.querySelectorAll("polygon")[2].points;
-    const point = new DOMPoint(
-      (points[0].x + points[2].x) / 2,
-      (points[0].y + points[2].y) / 2,
-    ).matrixTransform(node.getScreenCTM());
-    return { x: point.x, y: point.y };
-  });
-  const start = await center(box(4)), target = await center(box(3));
-  await page.mouse.move(start.x, start.y);
-  await page.mouse.down();
-  await page.mouse.move(target.x, target.y, { steps: 8 });
-  await page.mouse.up();
-  await expect(box(4)).toHaveAttribute("data-row", "0");
-  await expect(box(4)).toHaveAttribute("data-level", "3");
+  const first = await box(1).getAttribute("data-box-id");
+  const second = await box(2).getAttribute("data-box-id");
+  const third = await box(3).getAttribute("data-box-id");
+  await page.evaluate(({ first, second, third }) => {
+    localStorage.setItem("dijital-caki-koli-duzeni-2", JSON.stringify([
+      { id: first, x: 400, y: 302, angle: 0 },
+      { id: second, x: 144, y: 140, angle: -12 },
+      { id: third, x: 135, y: 316, angle: 8 },
+    ]));
+  }, { first, second, third });
   await page.reload();
-  await expect(box(4)).toHaveAttribute("data-level", "3");
-  await page.getByLabel("Seçili kutu").selectOption({ label: "KUTU-4" });
-  await page.getByRole("button", { name: "Sağa taşı" }).click();
-  await expect(box(4)).toHaveAttribute("data-column", "1");
-  await expect(box(4)).toHaveAttribute("data-level", "0");
+  await scene.scrollIntoViewIfNeeded();
+
+  const drag = async (locator, x, y) => {
+    const start = await locator.evaluate(node => {
+      const rect = node.querySelectorAll("polygon")[1].getBoundingClientRect();
+      return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+    });
+    const end = await locator.evaluate((node, target) => {
+      const from = new DOMPoint(Number(node.dataset.x), Number(node.dataset.y)).matrixTransform(node.ownerSVGElement.getScreenCTM());
+      const to = new DOMPoint(target.x, target.y).matrixTransform(node.ownerSVGElement.getScreenCTM());
+      return { dx: to.x - from.x, dy: to.y - from.y };
+    }, { x, y });
+    await page.mouse.move(start.x, start.y);
+    await page.mouse.down();
+    await page.mouse.move(start.x + end.dx, start.y + end.dy, { steps: 8 });
+    await page.mouse.up();
+  };
+
+  await drag(box(2), 423, 263);
+  await expect(box(2)).toHaveAttribute("data-support", first);
+  expect(Math.abs(Number(await box(2).getAttribute("data-x")) - 423)).toBeLessThan(3);
+  await expect(box(2)).toHaveAttribute("data-angle", "-12");
+  await drag(box(2), 464, 264);
+  await expect(box(2)).toHaveAttribute("data-support", "");
+  expect(Number(await box(2).getAttribute("data-x"))).toBeGreaterThan(480);
+  expect(Number(await box(2).getAttribute("data-y"))).toBeGreaterThan(302);
+  await drag(box(2), 576, 114);
+  expect(Math.abs(Number(await box(2).getAttribute("data-x")) - 576)).toBeLessThan(3);
+  expect(Math.abs(Number(await box(2).getAttribute("data-y")) - 114)).toBeLessThan(3);
+  const beforeRotate = Number(await box(2).getAttribute("data-angle"));
+  await page.getByRole("button", { name: "Sağa döndür" }).click();
+  await expect(box(2)).toHaveAttribute("data-angle", String(beforeRotate + 12));
+  await page.reload();
+  await expect(box(2)).toHaveAttribute("data-angle", String(beforeRotate + 12));
+  expect(Math.abs(Number(await box(2).getAttribute("data-x")) - 576)).toBeLessThan(3);
   await page.getByRole("searchbox").fill("çay");
-  await expect(box(4)).toHaveAttribute("aria-pressed", "true");
-  await expect(box(1)).toHaveAttribute("opacity", "0.35");
-  await expect(page.locator("#records li")).toHaveCount(1);
+  await expect(box(2)).toHaveAttribute("aria-pressed", "true");
+  await expect(box(1)).toHaveAttribute("opacity", "0.36");
 });
 
 test("döviz yükleme durumunu hemen gösterir ve fiyat geldiğinde gizler", async ({ page }) => {
