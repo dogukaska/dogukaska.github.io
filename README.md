@@ -14,4 +14,4 @@ Döviz ve Altın Çevirici’nin erken fiyat isteği, yükleme durumu ve tarayı
 
 Dosya Paylaşımı aracının katalog ve tarayıcı testleri OpenAI Codex desteğiyle güncellendi.
 
-[Hesaplama](https://dogukaska.github.io/hesaplama/) kategorisi ve doğrulama testleri, [Hesaplama.com](https://hesaplama.com/) örnekleri incelenerek OpenAI Codex desteğiyle geliştirildi.
+[Hesaplama kategorisinin](https://dogukaska.github.io/hesapkitap/) [kaynak kodu ve hesaplama testleri](https://github.com/dogukaska/hesapkitap) OpenAI Codex desteğiyle kendi deposuna taşındı.

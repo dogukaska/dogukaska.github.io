@@ -10,7 +10,7 @@ async function expectNoOverflow(page) {
 }
 
 async function openCalculator(page, id, name) {
-  const response = await page.goto("/hesaplama/?arac=" + id);
+  const response = await page.goto("/hesapkitap/?arac=" + id);
   expect(response?.status()).toBe(200);
   await expect(page.getByRole("heading", { name, exact: true })).toBeVisible();
   await expect(page.locator("#calculator")).toBeVisible();
@@ -29,6 +29,12 @@ function result(page, label) {
     .filter({ has: page.getByText(label, { exact: true }) })
     .locator("dd");
 }
+
+test("eski bağlantılar seçili aracı yeni adreste açar", async ({ page }) => {
+  await page.goto("/hesaplama/?arac=yuzde#sonuc");
+  await expect(page).toHaveURL(/\/hesapkitap\/\?arac=yuzde#sonuc$/);
+  await expect(page.getByRole("heading", { name: "Yüzde Hesaplama", exact: true })).toBeVisible();
+});
 
 test("zam, indirim, yüzde ve KDV farklı işlem kiplerinde doğru hesaplanır", async ({ page }) => {
   await test.step("Zam", async () => {

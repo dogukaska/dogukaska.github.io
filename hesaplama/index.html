@@ -2,38 +2,12 @@
 <html lang="tr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="description" content="Günlük hesaplama araçları. Zam, indirim, yaş, KDV, tarih ve daha fazlası.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hesaplama · Dijital Çakı</title>
-  <link rel="icon" href="/icons/dijital-caki.svg">
-  <link rel="stylesheet" href="/tool.css?v=20261126d">
-  <link rel="stylesheet" href="./style.css?v=1">
-  <script src="/theme.js?v=20261126c"></script>
-  <script type="module" src="./app.js?v=1"></script>
+  <link rel="canonical" href="https://dogukaska.github.io/hesapkitap/">
+  <script>location.replace("/hesapkitap/" + location.search + location.hash);</script>
 </head>
 <body>
-  <main class="tool calculators">
-    <header>
-      <a id="back" class="back" href="/#hesaplama">Uygulamalar</a>
-      <h1 id="title">Hesaplama</h1>
-      <p id="description" class="intro"></p>
-    </header>
-    <nav id="list" aria-label="Hesaplama araçları" hidden></nav>
-    <form id="calculator" class="panel" hidden>
-      <div id="mode-field" class="field" hidden>
-        <label for="mode">İşlem</label>
-        <select id="mode"></select>
-      </div>
-      <div id="fields" class="fields"></div>
-      <p id="hint" class="intro" hidden></p>
-      <div class="row">
-        <button type="submit" class="primary">Hesapla</button>
-        <button type="reset">Temizle</button>
-      </div>
-    </form>
-    <p id="error" role="alert"></p>
-    <div id="result" aria-live="polite"></div>
-    <noscript>Hesaplama araçları için JavaScript gerekli.</noscript>
-  </main>
+  <a href="/hesapkitap/">Hesaplama araçlarını aç</a>
 </body>
 </html>
