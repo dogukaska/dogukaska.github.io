@@ -30,6 +30,48 @@ function result(page, label) {
     .locator("dd");
 }
 
+for (const [width, colorScheme] of [[320, "light"], [393, "dark"], [430, "dark"], [768, "light"]]) {
+  test(`hesaplama kutuları ${width} px ekranda hizalanır ve aralarında boşluk kalır`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 850 });
+    await page.emulateMedia({ colorScheme });
+    await page.goto("/hesapkitap/");
+    const list = page.getByRole("navigation", { name: "Hesaplama araçları" });
+    await expect(list.getByRole("link")).toHaveCount(12);
+    const routes = await list.getByRole("link").evaluateAll((links) => links.map((link) => link.href));
+
+    for (const route of routes) {
+      await test.step(new URL(route).search, async () => {
+        await page.goto(route);
+        const form = page.locator("#calculator");
+        await expect(form).toBeVisible();
+        const layout = await form.evaluate((form) => {
+          const box = ({ left, top, right, bottom, height, width }) => ({ left, top, right, bottom, height, width });
+          return {
+            form: box(form.getBoundingClientRect()),
+            fields: Array.from(form.querySelectorAll(".field:not([hidden]) > :is(input, select)"),
+              (field) => box(field.getBoundingClientRect())),
+          };
+        });
+        expect(layout.fields.length).toBeGreaterThan(0);
+        for (const [i, field] of layout.fields.entries()) {
+          expect(field.left).toBeGreaterThanOrEqual(layout.form.left - 1);
+          expect(field.right).toBeLessThanOrEqual(layout.form.right + 1);
+          expect(field.height).toBeCloseTo(layout.fields[0].height, 0);
+          if (width <= 480) expect(field.width).toBeCloseTo(layout.form.width, 0);
+          for (const previous of layout.fields.slice(0, i)) {
+            const gap = Math.max(field.left - previous.right, field.top - previous.bottom);
+            expect(gap).toBeGreaterThanOrEqual(8);
+            if (field.left > previous.left && field.top < previous.bottom) {
+              expect(field.top).toBeCloseTo(previous.top, 0);
+            }
+          }
+        }
+        await expectNoOverflow(page);
+      });
+    }
+  });
+}
+
 test("eski bağlantılar seçili aracı yeni adreste açar", async ({ page }) => {
   await page.goto("/hesaplama/?arac=yuzde#sonuc");
   await expect(page).toHaveURL(/\/hesapkitap\/\?arac=yuzde#sonuc$/);
