@@ -7,12 +7,27 @@
 <meta name="description" content="Gram altın, dolar, euro ve sterlin kurlarını gör ve TL karşılığını hesapla.">
 <meta name="theme-color" content="#efede8">
 <link rel="preconnect" href="https://turkishlirarates.com" crossorigin>
-<link rel="preload" as="fetch" href="https://turkishlirarates.com/data/v1/rates.json" crossorigin>
+<script>
+window.dkRateRequests = (() => {
+  const url = "https://turkishlirarates.com/data/v1/rates.json";
+  function start() {
+    const startedAt = Date.now();
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 12_000);
+    const result = fetch(url, { signal: controller.signal, credentials: "omit" })
+      .then(response => response.ok ? response.json() : null)
+      .catch(() => null)
+      .finally(() => clearTimeout(timer));
+    return { startedAt, result };
+  }
+  return { start, initial: start() };
+})();
+</script>
 <link rel="icon" href="/icons/dijital-caki.svg">
 <link rel="stylesheet" href="/tool.css?v=20261126d">
-<link rel="stylesheet" href="style.css?v=1">
+<link rel="stylesheet" href="style.css?v=2">
 <script src="/theme.js?v=20261126c"></script>
-<script type="module" src="app.js?v=3"></script>
+<script type="module" src="app.js?v=4"></script>
 </head>
 <body>
 <main class="tool currency-tool">
@@ -22,6 +37,7 @@
   </header>
   <section class="market-rates glass" aria-labelledby="rates-title">
     <h2 id="rates-title">Altın ve döviz kurları</h2>
+    <p id="rates-status" role="status" data-waiting="true">Fiyatlar yükleniyor…</p>
     <table aria-labelledby="rates-title">
       <thead><tr><td></td><th scope="col">Alış</th><th scope="col">Satış</th></tr></thead>
       <tbody>
@@ -43,7 +59,6 @@
         </tr>
       </tbody>
     </table>
-    <p id="rates-status" role="status">Fiyatlar yükleniyor…</p>
     <div class="rate-converter">
       <h2>TL karşılığını hesapla</h2>
       <div class="converter-fields">

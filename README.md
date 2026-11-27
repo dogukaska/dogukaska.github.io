@@ -9,3 +9,5 @@ Dijital Çakı’nın ana sayfası ve araç kataloğu Claude ve OpenAI Codex’i
 Kataloğun iki sütunlu görünümü ve açılır araç listeleri OpenAI Codex desteğiyle geliştirildi ve test edildi.
 
 Ev araçlarının kataloğa eklenmesi, Tarif Kartı bağlantısının taşınması ve tarayıcı testleri OpenAI Codex desteğiyle yapıldı.
+
+Döviz ve Altın Çevirici’nin erken fiyat isteği, yükleme durumu ve tarayıcı testleri OpenAI Codex desteğiyle geliştirildi.
