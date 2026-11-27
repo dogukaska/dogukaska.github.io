@@ -132,10 +132,8 @@ test("çizilen imza PDF’e eklenir ve küçük resimler sürüklenir", async ({
   expect((await pageText(page, organized.bytes))[0]).toContain("Ikinci sayfa");
 });
 
-test("OCR taramasından seçilebilir Türkçe metin çıkar", async ({ page }) => {
-  test.setTimeout(90_000);
-  await page.goto("/");
-  const png = await page.evaluate(() => {
+async function ocrImage(page) {
+  const base64 = await page.evaluate(() => {
     const canvas = document.createElement("canvas");
     canvas.width = 1600; canvas.height = 480;
     const ctx = canvas.getContext("2d");
@@ -146,8 +144,37 @@ test("OCR taramasından seçilebilir Türkçe metin çıkar", async ({ page }) =
     ctx.fillText("Şehir, yağmur, güneş, özgürlük.", 70, 350);
     return canvas.toDataURL("image/png").split(",")[1];
   });
+  return Buffer.from(base64, "base64");
+}
+
+test("fotoğraf OCR’ı bitmap desteği olmadan Türkçe metin çıkarır", async ({ page }) => {
+  test.setTimeout(90_000);
+  await page.addInitScript(() => {
+    window.createImageBitmap = async () => { throw new Error("Bitmap açılamadı"); };
+  });
+  await page.goto("/belge/ocr/");
+  await page.locator("#file").setInputFiles({ name: "Türkçe tarama.png", mimeType: "image/png", buffer: await ocrImage(page) });
+  await page.getByRole("button", { name: "Metni çıkar" }).click();
+  await expect(page.locator("#result")).toHaveValue(/Türkçe tarama örneği[\s\S]+İstanbul[\s\S]+özgürlük/, { timeout: 75_000 });
+});
+
+test("tarama modeli kullanıcı fotoğraf seçtiğinde yüklenir", async ({ page }) => {
+  const modelRequests = [];
+  await page.route("**/belge/vendor/scanic/scanic-mlDetector.js", async (route) => {
+    modelRequests.push(route.request().url());
+    await route.abort();
+  });
+  await page.goto("/belge/", { waitUntil: "networkidle" });
+  expect(modelRequests).toEqual([]);
+  await page.locator("#pick").setInputFiles({ name: "belge.png", mimeType: "image/png", buffer: await ocrImage(page) });
+  await expect.poll(() => modelRequests.length).toBe(1);
+});
+
+test("OCR taramasından seçilebilir Türkçe metin çıkar", async ({ page }) => {
+  test.setTimeout(90_000);
+  await page.goto("/");
   const doc = await PDFDocument.create();
-  const image = await doc.embedPng(Buffer.from(png, "base64"));
+  const image = await doc.embedPng(await ocrImage(page));
   doc.addPage([800, 240]).drawImage(image, { x: 0, y: 0, width: 800, height: 240 });
   await load(page, "ocr", await doc.save());
   const [file] = await Promise.all([page.waitForEvent("download", { timeout: 75_000 }), page.getByRole("button", { name: "PDF indir" }).click()]);
