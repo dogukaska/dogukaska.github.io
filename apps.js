@@ -40,7 +40,7 @@ export const CATEGORIES = [
   ] },
   { id: "dosya", name: "Dosya", apps: [
     { name: "Arşiv Açıcı", desc: "ZIP, RAR ve 7z dosyalarının içini aç", terms: "arşiv sıkıştırma çıkart unzip winrar parola", url: "/dosya/arsiv/", icon: "file" },
-    { name: "Dosya Paylaş", desc: "Büyük dosyaları 50 GB’a kadar gönder", terms: "büyük dosya paylaş yükle swisstransfer wetransfer filemail ücret hesap", url: "/dosya/paylas/", icon: "file" },
+    { name: "Dosya Paylaş", desc: "Plik ile büyük dosyalar gönder", terms: "büyük dosya paylaş yükle plik aktar transfer", url: "/dosya/paylas/", icon: "file" },
   ] },
   { id: "ev", name: "Ev", apps: [
     { name: "Odaya Sığar mı?", desc: "Mobilya ve kapı ölçüleriyle oda yerleşimini çiz", terms: "oda planı koltuk mobilya boyut yerleşim santimetre", url: "/ev/yerlesim/", icon: "image" },

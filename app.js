@@ -1,4 +1,4 @@
-import { CATEGORIES } from "./apps.js?v=20261127f";
+import { CATEGORIES } from "./apps.js?v=20261127g";
 import { icon } from "./icons.js?v=20261126g";
 
 const visiblePerCategory = 6;

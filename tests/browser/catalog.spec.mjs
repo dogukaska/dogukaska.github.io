@@ -98,6 +98,6 @@ test("görsel ve büyük dosya paylaşımı ayrı kategorilerde açılır", asyn
   const files = page.getByRole("region", { name: "Dosya", exact: true });
   await files.getByRole("link", { name: /Dosya Paylaş/ }).click();
   await expect(page.getByRole("heading", { name: "Dosya Paylaş", exact: true })).toBeVisible();
-  await expect(page.getByRole("link", { name: "SwissTransfer’ı aç", exact: true })).toHaveAttribute("href", "https://www.swisstransfer.com/en");
-  await expect(page.getByText(/gönderide toplam 50 GB/)).toBeVisible();
+  await expect(page.getByLabel("Plik sunucusu")).toBeVisible();
+  await expect(page.getByText("Gönderi başına toplam 15 GB")).toBeVisible();
 });

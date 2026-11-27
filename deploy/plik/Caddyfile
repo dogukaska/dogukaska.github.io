@@ -1,0 +1,21 @@
+{$PLIK_DOMAIN} {
+	@preflight {
+		method OPTIONS
+		header Origin {$DK_ORIGIN:https://dogukaska.github.io}
+	}
+	@digitalCaki header Origin {$DK_ORIGIN:https://dogukaska.github.io}
+
+	header Vary Origin
+	header @digitalCaki {
+		Access-Control-Allow-Origin "{$DK_ORIGIN:https://dogukaska.github.io}"
+		Access-Control-Allow-Headers "Content-Type, X-PlikToken, X-UploadToken"
+		Access-Control-Allow-Methods "GET, POST, DELETE, OPTIONS"
+		defer
+	}
+
+	respond @preflight 204
+	reverse_proxy {$PLIK_UPSTREAM:plik:8080} {
+		header_down -Access-Control-Allow-Origin
+		header_down -Access-Control-Allow-Credentials
+	}
+}

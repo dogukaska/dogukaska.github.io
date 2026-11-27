@@ -14,4 +14,4 @@ Döviz ve Altın Çevirici’nin erken fiyat isteği, yükleme durumu ve tarayı
 
 Orijinal Görsel Paylaş aracının katalog bağlantısı OpenAI Codex desteğiyle eklendi.
 
-Büyük dosyalar için SwissTransfer yönlendirmesi ve ayrı Dosya Paylaş katalog girişi OpenAI Codex desteğiyle eklendi.
+Dosya Paylaş aracı, Plik API entegrasyonu ve sunucu kurulum dosyaları OpenAI Codex desteğiyle geliştirildi.
