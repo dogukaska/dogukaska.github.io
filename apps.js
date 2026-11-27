@@ -8,7 +8,6 @@ export const CATEGORIES = [
     { name: "Görsel Gizle", desc: "Yüzleri bul ve gizle", terms: "mozaik sansür fotoğraf karart", url: "/foto/gizle/", icon: "image" },
     { name: "Hedef Boyuta Küçült", desc: "KB sınırına indir", terms: "fotoğraf sıkıştır dosya boyutu kb mb", url: "/foto/hedef-boyut/", icon: "image" },
     { name: "Görsele Filigran", desc: "Metin veya logo ekle", terms: "jpg png gif filigran damga", url: "/foto/studyo/?arac=filigran", icon: "image" },
-    { name: "Görsel Paylaş", desc: "100 MB’a kadar görseli link veya QR ile gönder", terms: "resim paylaş orijinal kalite qr link sıkıştırmasız gönder", url: "/foto/paylas/", icon: "image" },
   ] },
   { id: "video", name: "Video ve Ses", apps: [
     { name: "Video Araçları", desc: "Ses çıkar, GIF yap", terms: "mp3 wav hareketli resim gif", url: "/video/", icon: "video" },
@@ -39,6 +38,7 @@ export const CATEGORIES = [
     { name: "Barkod Oluştur", desc: "Code 128 ve EAN‑13 üret", terms: "ean market ürün barkodu", url: "/qr/barkod/", icon: "file" },
   ] },
   { id: "dosya", name: "Dosya", apps: [
+    { name: "Dosya Paylaşımı", desc: "100 MB’a kadar dosyayı bağlantı veya QR ile gönder", terms: "görsel resim fotoğraf pdf zip belge orijinal kalite qr link gönder", url: "/foto/paylas/", icon: "file" },
     { name: "Arşiv Açıcı", desc: "ZIP, RAR ve 7z dosyalarının içini aç", terms: "arşiv sıkıştırma çıkart unzip winrar parola", url: "/dosya/arsiv/", icon: "file" },
   ] },
   { id: "ev", name: "Ev", apps: [
