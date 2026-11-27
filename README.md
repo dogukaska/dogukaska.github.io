@@ -12,4 +12,4 @@ Ev araçlarının kataloğa eklenmesi, Tarif Kartı bağlantısının taşınmas
 
 Döviz ve Altın Çevirici’nin erken fiyat isteği, yükleme durumu ve tarayıcı testleri OpenAI Codex desteğiyle geliştirildi.
 
-Orijinal Görsel Paylaş aracının katalog bağlantısı OpenAI Codex desteğiyle eklendi.
+Dosya Paylaşımı aracının katalog ve tarayıcı testleri OpenAI Codex desteğiyle güncellendi.

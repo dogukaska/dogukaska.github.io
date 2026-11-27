@@ -1,3 +1,4 @@
+import { readFile } from "node:fs/promises";
 import { expect } from "@playwright/test";
 import { test } from "./fixtures.mjs";
 
@@ -91,11 +92,74 @@ test("altı araç iki sütunda görünür ve arama gizli araçları da bulur", a
   await expect(page.getByRole("link", { name: /Görsele Filigran/ })).toBeVisible();
 });
 
-test("Görsel Paylaş ve Arşiv Açıcı katalogda açılır", async ({ page }) => {
+test("Dosya Paylaşımı ve Arşiv Açıcı katalogda açılır", async ({ page }) => {
   await page.goto("/");
-  const photo = page.getByRole("region", { name: "Fotoğraf", exact: true });
-  await expect(photo.getByRole("link", { name: /Görsel Paylaş/ })).toHaveAttribute("href", "/foto/paylas/");
   const files = page.getByRole("region", { name: "Dosya", exact: true });
+  await expect(files.getByRole("link", { name: /Dosya Paylaşımı/ })).toHaveAttribute("href", "/foto/paylas/");
   await expect(files.getByRole("link", { name: /Arşiv Açıcı/ })).toHaveAttribute("href", "/dosya/arsiv/");
-  await expect(page.locator('a[href="/dosya/paylas/"]')).toHaveCount(0);
+  await files.getByRole("link", { name: /Dosya Paylaşımı/ }).click();
+  await expect(page.getByRole("heading", { name: "Dosya Paylaşımı" })).toBeVisible();
+  await expect(page.getByText(/Her gönderide toplam 100 MB/)).toBeVisible();
+});
+
+test("Farklı dosya türleri orijinal baytlarla paylaşılır ve ZIP olarak indirilebilir", async ({ page }) => {
+  const id = "dK123456789";
+  let packet;
+  // WebKit's interception API omits Blob contents from multipart request bodies.
+  await page.addInitScript(() => {
+    const send = XMLHttpRequest.prototype.send;
+    XMLHttpRequest.prototype.send = function (body) {
+      if (body instanceof FormData && body.get("files") instanceof Blob) {
+        window.transferPacket = body.get("files").arrayBuffer();
+      }
+      return send.call(this, body);
+    };
+  });
+  await page.route("https://tempfile.org/**", async (route) => {
+    const request = route.request();
+    const cors = { "Access-Control-Allow-Origin": "*" };
+    if (request.method() === "OPTIONS") {
+      await route.fulfill({ status: 204, headers: { ...cors, "Access-Control-Allow-Methods": "GET, POST" } });
+    } else if (request.method() === "POST" && request.url().endsWith("/api/upload/local")) {
+      packet = Buffer.from(await page.evaluate(async () => Array.from(new Uint8Array(await window.transferPacket))));
+      await route.fulfill({
+        headers: cors,
+        json: { success: true, files: [{ id, size: packet.length, expiryTime: Date.now() + 3_600_000 }] },
+      });
+    } else if (request.url().endsWith(`/${id}/download`) && packet) {
+      await route.fulfill({ headers: cors, body: packet, contentType: "application/octet-stream" });
+    } else {
+      await route.abort();
+    }
+  });
+
+  const document = Buffer.from("%PDF-1.7\n");
+  await page.goto("/foto/paylas/");
+  await page.getByLabel("Dosyaları seç").setInputFiles([
+    { name: "Müşteri belgesi.pdf", mimeType: "application/pdf", buffer: document },
+    { name: "README", mimeType: "", buffer: Buffer.from("İlk dosya") },
+    { name: "README", mimeType: "", buffer: Buffer.alloc(0) },
+  ]);
+  await page.getByRole("button", { name: "Yükle ve bağlantı oluştur" }).click();
+  await expect(page.getByRole("status")).toHaveText("Bağlantı hazır.");
+  const link = await page.getByRole("textbox", { name: "Paylaşım bağlantısı", exact: true }).inputValue();
+  await page.goto(link);
+  await page.reload();
+  await page.getByRole("button", { name: "Dosyaları al" }).click();
+  const pdf = page.getByRole("button", { name: "Müşteri belgesi.pdf dosyasını indir" });
+  await expect(pdf).toBeVisible();
+  const [single] = await Promise.all([page.waitForEvent("download"), pdf.click()]);
+  expect(single.suggestedFilename()).toBe("Müşteri belgesi.pdf");
+  expect(await readFile(await single.path())).toEqual(document);
+
+  const [archive] = await Promise.all([
+    page.waitForEvent("download"),
+    page.getByRole("button", { name: "Tümünü ZIP olarak indir" }).click(),
+  ]);
+  const bytes = Array.from(await readFile(await archive.path()));
+  const names = await page.evaluate(async (contents) => {
+    const zip = await window.JSZip.loadAsync(new Uint8Array(contents));
+    return Object.keys(zip.files);
+  }, bytes);
+  expect(names).toEqual(["Müşteri belgesi.pdf", "README", "README (2)"]);
 });
