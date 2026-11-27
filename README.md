@@ -13,3 +13,5 @@ Ev araçlarının kataloğa eklenmesi, Tarif Kartı bağlantısının taşınmas
 Döviz ve Altın Çevirici’nin erken fiyat isteği, yükleme durumu ve tarayıcı testleri OpenAI Codex desteğiyle geliştirildi.
 
 Dosya Paylaşımı aracının katalog ve tarayıcı testleri OpenAI Codex desteğiyle güncellendi.
+
+[Hesaplama](https://dogukaska.github.io/hesaplama/) kategorisi ve doğrulama testleri, [Hesaplama.com](https://hesaplama.com/) örnekleri incelenerek OpenAI Codex desteğiyle geliştirildi.
