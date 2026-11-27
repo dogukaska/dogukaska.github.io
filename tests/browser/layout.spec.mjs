@@ -30,6 +30,20 @@ for (const [width, colorScheme] of [[320, "light"], [393, "dark"], [430, "dark"]
           if (root.scrollWidth > root.clientWidth + 1) {
             issues.push(`yatay taşma ${root.scrollWidth} / ${root.clientWidth}`);
           }
+          const footer = document.querySelector(".catalog-footer-content");
+          if (footer) {
+            const note = footer.querySelector("p");
+            const link = footer.querySelector("a");
+            const text = document.createRange();
+            text.selectNodeContents(note);
+            const textBoxes = text.getClientRects();
+            const noteBox = note.getBoundingClientRect();
+            const linkBox = link.getBoundingClientRect();
+            if (textBoxes.length !== 1 || Math.abs(noteBox.top - linkBox.top) > 1
+              || linkBox.left - noteBox.right < 6 || linkBox.right > footer.getBoundingClientRect().right + 1) {
+              issues.push("Alt bilgi metni ve GitHub bağlantısı tek satıra sığmıyor");
+            }
+          }
           const visible = Array.from(document.querySelectorAll("input, select, textarea, button, [role=button]"))
             .map((element) => ({ element, box: element.getBoundingClientRect() }))
             .filter(({ element, box }) => box.width >= 4 && box.height >= 4
