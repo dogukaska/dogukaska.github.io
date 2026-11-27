@@ -1,4 +1,4 @@
-const endpoint = "https://turkishlirarates.com/data/v1/rates.json";
+const rateRequests = window.dkRateRequests;
 const refreshInterval = 60_000;
 const maxPriceAge = 45 * 60_000;
 const storageKey = "dijital-caki-piyasa-fiyatlari-v1";
@@ -67,16 +67,16 @@ function renderConverter(loading = false) {
   converterNote.hidden = !note;
 }
 
-function render(loading = false) {
+function render(loading = false, failed = false) {
   const any = rows.some(row => row.last);
-  const now = Date.now();
-  const today = dateFormat.format(now);
-  const showingOldPrices = rows.some(row => row.last && now - Date.parse(row.last.time) > maxPriceAge);
+  const today = dateFormat.format(Date.now());
   let message = "";
-  if (!any) message = loading ? "Fiyatlar yükleniyor…" : "Fiyat şu anda alınamıyor";
-  else if (loading && showingOldPrices) message = "Fiyatlar güncelleniyor…";
+  if (loading) message = any ? "Fiyatlar güncelleniyor…" : "Fiyatlar yükleniyor…";
+  else if (!any) message = "Fiyatlar şu anda alınamıyor.";
+  else if (failed) message = "Güncelleme alınamadı. Son fiyatlar gösteriliyor.";
   if (status.textContent !== message) status.textContent = message;
   status.hidden = !message;
+  status.dataset.waiting = String(loading);
   for (const row of rows) {
     const price = row.last;
     row.buy.textContent = price ? priceFormat.format(price.buy) + " TL" : "—";
@@ -95,6 +95,7 @@ function render(loading = false) {
 }
 
 let timer, lastAttempt = -Infinity, inFlight = false;
+let initialRequest = rateRequests.initial;
 
 function schedule() {
   clearTimeout(timer);
@@ -107,20 +108,24 @@ function schedule() {
 async function refresh() {
   if (document.hidden || inFlight) return;
   inFlight = true;
-  lastAttempt = Date.now();
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 12_000);
+  const request = initialRequest ?? rateRequests.start();
+  initialRequest = undefined;
+  lastAttempt = request.startedAt;
+  render(true);
+  let updated = false;
   try {
-    // İlk istek HTML'deki preload yanıtını kullanır; sonraki istekler kaynağın önbellek süresini izler.
-    const response = await fetch(endpoint, { signal: controller.signal });
-    if (!response.ok) throw new Error("Fiyat yanıtı başarısız");
-    const { market } = await response.json();
+    const payload = await request.result;
+    const market = payload?.market;
+    if (!market) throw new Error("Fiyat yanıtı alınamadı.");
     const next = {};
     for (const row of rows) {
       const group = market?.[row.group];
       const item = Array.isArray(group) ? group.find(item => item?.code === row.code) : null;
       const isLatest = validPrice(item) && (!row.last || Date.parse(item.time) >= Date.parse(row.last.time));
-      if (isLatest) row.last = { buy: item.buy, sell: item.sell, time: item.time };
+      if (isLatest) {
+        row.last = { buy: item.buy, sell: item.sell, time: item.time };
+        updated = true;
+      }
       const age = isLatest ? Date.now() - Date.parse(item.time) : Infinity;
       row.current = Boolean(isLatest && item.fresh === true && market.status === "live" &&
         age >= -refreshInterval && age <= maxPriceAge);
@@ -130,9 +135,8 @@ async function refresh() {
   } catch {
     for (const row of rows) row.current = false;
   } finally {
-    clearTimeout(timeout);
     inFlight = false;
-    render();
+    render(false, !updated);
     schedule();
   }
 }
@@ -145,9 +149,9 @@ window.addEventListener("online", () => {
 });
 window.addEventListener("offline", () => {
   for (const row of rows) row.current = false;
-  render();
+  render(inFlight, true);
 });
-amount.addEventListener("input", () => renderConverter());
-unit.addEventListener("change", () => renderConverter());
+amount.addEventListener("input", () => renderConverter(inFlight));
+unit.addEventListener("change", () => renderConverter(inFlight));
 render(true);
 schedule();

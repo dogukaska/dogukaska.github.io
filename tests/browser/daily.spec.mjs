@@ -294,3 +294,87 @@ test("halı mobilyanın altında kalır ve L koltuğun boş köşesi çakışmaz
   await page.locator("#item-x").press("Tab");
   await expect(page.getByRole("status")).toContainText("başka bir mobilyayla örtüşüyor");
 });
+
+test("3D koliler kenarda istiflenir, başka bir yığına taşınır ve düzen saklanır", async ({ page }) => {
+  await page.goto("/ev/araclar/?arac=kutu");
+  for (let index = 1; index <= 4; index++) {
+    await page.getByLabel("Kutu kodu").fill("KUTU-" + index);
+    await page.getByLabel("İçindekiler").fill(index === 4 ? "Çay ve kupalar" : "Kitap");
+    await page.getByRole("button", { name: "Kutuyu kaydet" }).click();
+    await expect(page.locator("#stacks-scene [data-box-id]")).toHaveCount(index);
+  }
+  const scene = page.locator("#stacks-scene");
+  const box = number => scene.getByRole("button", { name: "KUTU-" + number, exact: true });
+  await expect(box(3)).toHaveAttribute("data-level", "2");
+  await expect(box(4)).toHaveAttribute("data-row", "1");
+  await expect(box(4).locator("text")).toHaveText("KUTU-4");
+  await scene.scrollIntoViewIfNeeded();
+  const center = async locator => locator.evaluate(node => {
+    const points = node.querySelectorAll("polygon")[2].points;
+    const point = new DOMPoint(
+      (points[0].x + points[2].x) / 2,
+      (points[0].y + points[2].y) / 2,
+    ).matrixTransform(node.getScreenCTM());
+    return { x: point.x, y: point.y };
+  });
+  const start = await center(box(4)), target = await center(box(3));
+  await page.mouse.move(start.x, start.y);
+  await page.mouse.down();
+  await page.mouse.move(target.x, target.y, { steps: 8 });
+  await page.mouse.up();
+  await expect(box(4)).toHaveAttribute("data-row", "0");
+  await expect(box(4)).toHaveAttribute("data-level", "3");
+  await page.reload();
+  await expect(box(4)).toHaveAttribute("data-level", "3");
+  await page.getByLabel("Seçili kutu").selectOption({ label: "KUTU-4" });
+  await page.getByRole("button", { name: "Sağa taşı" }).click();
+  await expect(box(4)).toHaveAttribute("data-column", "1");
+  await expect(box(4)).toHaveAttribute("data-level", "0");
+  await page.getByRole("searchbox").fill("çay");
+  await expect(box(4)).toHaveAttribute("aria-pressed", "true");
+  await expect(box(1)).toHaveAttribute("opacity", "0.35");
+  await expect(page.locator("#records li")).toHaveCount(1);
+});
+
+test("döviz yükleme durumunu hemen gösterir ve fiyat geldiğinde gizler", async ({ page }) => {
+  const pending = Promise.withResolvers();
+  await page.route("https://turkishlirarates.com/data/v1/rates.json", async route => {
+    await pending.promise;
+    await route.fulfill({
+      json: { market: { status: "live", currencies: [{ code: "USD", buy: 49, sell: 50, time: new Date().toISOString(), fresh: true }] } },
+      headers: { "access-control-allow-origin": "*" },
+    });
+  });
+  try {
+    await page.goto("/doviz/", { waitUntil: "domcontentloaded" });
+    const status = page.locator("#rates-status");
+    await expect(status).toHaveText("Fiyatlar yükleniyor…");
+    await expect(status).toBeVisible();
+    pending.resolve();
+    await expect(page.locator('[data-rate="USD"] [data-price="sell"]')).toHaveText("50,00 TL");
+    await expect(status).toBeHidden();
+  } finally { pending.resolve(); }
+});
+
+test("döviz güncellemesi gecikirse taze önbellek de anında kullanılır", async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("dijital-caki-piyasa-fiyatlari-v1", JSON.stringify({
+      USD: { buy: 47, sell: 48, time: new Date().toISOString() },
+    }));
+  });
+  const pending = Promise.withResolvers();
+  await page.route("https://turkishlirarates.com/data/v1/rates.json", async route => {
+    await pending.promise;
+    await route.fulfill({ status: 503, headers: { "access-control-allow-origin": "*" } });
+  });
+  try {
+    await page.goto("/doviz/", { waitUntil: "domcontentloaded" });
+    const status = page.locator("#rates-status");
+    const price = page.locator('[data-rate="USD"] [data-price="sell"]');
+    await expect(status).toHaveText("Fiyatlar güncelleniyor…");
+    await expect(price).toHaveText("48,00 TL");
+    pending.resolve();
+    await expect(status).toHaveText("Güncelleme alınamadı. Son fiyatlar gösteriliyor.");
+    await expect(price).toHaveText("48,00 TL");
+  } finally { pending.resolve(); }
+});

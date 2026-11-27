@@ -9,7 +9,21 @@
 .market-rates thead, .market-rates time, .rate-note, #rates-status, .rates-footer { color: var(--mute); font-size: .75rem; font-weight: 450; }
 .market-rates time:not([hidden]), .rate-note:not([hidden]) { display: block; }
 .market-rates td[data-price] { white-space: nowrap; }
-#rates-status { margin: 3px 0 0; }
+#rates-status { margin: 2px 0 5px; }
+#rates-status[data-waiting="true"]::before {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-inline-end: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  content: "";
+  vertical-align: .12em;
+}
+@media (prefers-reduced-motion: no-preference) {
+  #rates-status[data-waiting="true"]::before { animation: rates-pending 1.1s ease-in-out infinite alternate; }
+  @keyframes rates-pending { from { opacity: .35; } to { opacity: 1; } }
+}
 .rates-footer { display: flex; flex-wrap: wrap; gap: 3px 12px; margin-top: 6px; }
 .rates-footer a { color: inherit; text-underline-offset: 2px; }
 .rates-footer a:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
