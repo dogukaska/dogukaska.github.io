@@ -14,7 +14,7 @@ test("arşivden Türkçe adlı tek dosya çıkarılır", async ({ page }) => {
 });
 
 test("tarif kesirleri ölçeklenir ve kayıt sayfa yenilenince geri gelir", async ({ page }) => {
-  await page.goto("/mutfak/tarif/");
+  await page.goto("/ev/tarif/");
   await page.locator("#title").fill("Kek");
   await page.locator("#ingredients").fill("1½ su bardağı süt\n1/2 kaşık tuz\n2–4 yumurta\nTadına göre şeker");
   await page.locator("#servings").fill("2");
@@ -146,4 +146,106 @@ test("mobilya 3D önizlemede dört açıdan sürüklenir ve köşede kalır", as
   await page.reload();
   await expect(x).toHaveValue("0");
   await expect(y).toHaveValue("245");
+});
+
+test("kutu araması Türkçe metni bulur ve etiket orijinal içeriği taşır", async ({ page }) => {
+  await page.goto("/ev/araclar/?arac=kutu");
+  await page.getByLabel("Kutu kodu").fill("MUTFAK-03");
+  await page.getByLabel("Oda", { exact: true }).fill("Mutfak");
+  await page.getByLabel("İçindekiler").fill("Kahve değirmeni\nKupalar");
+  await page.getByRole("button", { name: "Kutuyu kaydet" }).click();
+  await expect(page.getByRole("status")).toHaveText("Kayıt saklandı.");
+  await page.reload();
+  const search = page.getByRole("searchbox");
+  await search.fill("degirmeni");
+  await expect(page.locator("#records")).toContainText("MUTFAK-03");
+  await page.evaluate(() => { window.print = () => { window.printedLabel = document.getElementById("print-label").textContent; }; });
+  await page.getByRole("button", { name: "Etiketi yazdır" }).click();
+  expect(await page.evaluate(() => window.printedLabel)).toContain("Kahve değirmeni");
+  await search.fill("bulunmayacak");
+  await expect(page.locator("#records")).toHaveText("Eşleşen kayıt bulunamadı.");
+});
+
+test("garanti eki yenilemeden sonra ZIP ve takvim dosyasıyla alınır", async ({ page }) => {
+  await page.goto("/ev/araclar/?arac=garanti");
+  await page.getByLabel("Ürün adı").fill("Çamaşır makinesi");
+  await page.getByLabel("Seri numarası").fill("00123");
+  await page.getByLabel("Garanti bitişi").fill("2027-02-08");
+  await page.locator('[name="attachment"]').setInputFiles({
+    name: "fiş.pdf", mimeType: "application/pdf", buffer: Buffer.from("%PDF-1.4\nörnek"),
+  });
+  await page.getByRole("button", { name: "Ürünü kaydet" }).click();
+  await expect(page.getByRole("status")).toHaveText("Kayıt saklandı.");
+  await page.reload();
+  await expect(page.getByRole("button", { name: "Fişi indir" })).toBeVisible();
+  const [ics] = await Promise.all([page.waitForEvent("download"), page.getByRole("button", { name: "Takvim dosyası" }).click()]);
+  expect(await readFile(await ics.path(), "utf8")).toContain("DTSTART;VALUE=DATE:20270208");
+  expect(await readFile(await ics.path(), "utf8")).toContain("TRIGGER:-P7D");
+  const [zip] = await Promise.all([page.waitForEvent("download"), page.getByRole("button", { name: "Garanti ZIP’i" }).click()]);
+  const zipBytes = await readFile(await zip.path());
+  expect(zipBytes.subarray(0, 4)).toEqual(Buffer.from([80, 75, 3, 4]));
+  expect(zipBytes.includes(Buffer.from("fis-fiş.pdf"))).toBe(true);
+});
+
+test("boya hesabı kapıları düşer ve kutuları en az artana göre seçer", async ({ page }) => {
+  await page.goto("/ev/araclar/?arac=boya");
+  for (const [label, value] of [["Oda eni (m)", "4"], ["Oda boyu (m)", "5"], ["Duvar yüksekliği (m)", "3"],
+    ["Kapı ve pencere (m²)", "4"], ["Kat sayısı", "1"], ["Ek pay (%)", "0"], ["Kutu boyları (L)", "3 5 9"]]) {
+    await page.getByLabel(label).fill(value);
+  }
+  await page.getByRole("button", { name: "Hesapla" }).click();
+  await expect(page.locator("#paint-summary")).toContainText("50 m² net duvar · 5 L boya gerekli");
+  await expect(page.locator("#paint-cans")).toHaveText("1 × 5 L");
+  await page.getByLabel("Kapı ve pencere (m²)").fill("60");
+  await page.getByRole("button", { name: "Hesapla" }).click();
+  await expect(page.getByRole("status")).toContainText("toplam duvar alanından küçük olmalı");
+  await expect(page.locator("#paint-result")).toBeHidden();
+});
+
+test("sayaç farklı tarihlerdeki okumaları karşılaştırır ve CSV verir", async ({ page }) => {
+  await page.goto("/ev/araclar/?arac=sayac");
+  const add = async (day, reading) => {
+    await page.getByRole("combobox", { name: "Sayaç türü", exact: true }).selectOption("water");
+    await page.getByLabel("Okuma tarihi").fill(day);
+    await page.getByLabel("Sayaç adı").fill("Ev");
+    await page.getByLabel("Endeks (m³)").fill(reading);
+    await page.getByRole("button", { name: "Okumayı kaydet" }).click();
+    await expect(page.getByRole("status")).toHaveText("Kayıt saklandı.");
+    await expect(page.getByRole("combobox", { name: "Sayaç türü", exact: true })).toHaveValue("electric");
+  };
+  await add("2026-12-01", "112.5");
+  await add("2026-11-01", "100");
+  await add("2027-01-01", "0");
+  await page.reload();
+  await expect(page.locator("#records")).toContainText("Tüketim · 12,5 m³");
+  await expect(page.locator("#records")).toContainText("Endeks düşmüş.");
+  const [file] = await Promise.all([page.waitForEvent("download"), page.getByRole("button", { name: "CSV indir" }).click()]);
+  expect(await readFile(await file.path(), "utf8")).toContain('"2026-12-01";"112,5";"12,5";"m³"');
+});
+
+test("mobilya modeli değiştirilince iki görünüm güncellenir ve seçim saklanır", async ({ page }) => {
+  await page.goto("/ev/yerlesim/");
+  await page.getByRole("button", { name: "Mobilyayı ekle" }).click();
+  const model = page.getByLabel("Seçili mobilya modeli");
+  const canvas = page.locator("#room");
+  const snapshot = () => canvas.evaluate(node => node.toDataURL());
+  const flat = await snapshot();
+  await model.selectOption("bed");
+  expect(await snapshot()).not.toBe(flat);
+  await page.getByRole("button", { name: "3D önizleme" }).click();
+  const bed = await snapshot();
+  await model.selectOption("tv");
+  expect(await snapshot()).not.toBe(bed);
+  await page.reload();
+  await expect(model).toHaveValue("tv");
+});
+
+test("eski Tarif Kartı bağlantısı yeni konumda aynı kayıtları açar", async ({ page }) => {
+  await page.goto("/ev/tarif/");
+  await page.evaluate(() => localStorage.setItem("dijital-caki-tarifler-1",
+    JSON.stringify([{ id: "eski", title: "Eski kek", base: 4, servings: 4, ingredients: "100 g un", steps: "", source: "" }])));
+  await page.goto("/mutfak/tarif/");
+  await expect(page).toHaveURL(/\/ev\/tarif\/$/);
+  await page.locator("#recipes").selectOption({ label: "Eski kek" });
+  await expect(page.locator("#ingredient-view")).toContainText("100 g un");
 });

@@ -40,11 +40,13 @@ export const CATEGORIES = [
   { id: "dosya", name: "Dosya", apps: [
     { name: "Arşiv Açıcı", desc: "ZIP, RAR ve 7z dosyalarının içini aç", terms: "arşiv sıkıştırma çıkart unzip winrar parola", url: "/dosya/arsiv/", icon: "file" },
   ] },
-  { id: "mutfak", name: "Mutfak", apps: [
-    { name: "Tarif Kartı", desc: "Tarif sakla, porsiyonu değiştir ve malzemeleri işaretle", terms: "yemek malzeme porsiyon mutfak tarif ölçü", url: "/mutfak/tarif/", icon: "book" },
-  ] },
   { id: "ev", name: "Ev", apps: [
     { name: "Odaya Sığar mı?", desc: "Mobilya ve kapı ölçüleriyle oda yerleşimini çiz", terms: "oda planı koltuk mobilya boyut yerleşim santimetre", url: "/ev/yerlesim/", icon: "image" },
+    { name: "Taşınma Kutusu Bulucu", desc: "Kutuların içini kaydet ve ara", terms: "taşınma koli oda etiket eşya", url: "/ev/araclar/?arac=kutu", icon: "file" },
+    { name: "Fiş ve Garanti Arşivi", desc: "Fişleri ve garanti tarihlerini sakla", terms: "garanti servis fatura seri numarası hatırlatma", url: "/ev/araclar/?arac=garanti", icon: "file" },
+    { name: "Boya Alış Listesi", desc: "Duvara gereken boya kutularını hesapla", terms: "boya metrekare litre duvar dekorasyon", url: "/ev/araclar/?arac=boya", icon: "file" },
+    { name: "Sayaç Okuma Defteri", desc: "Endeks kaydet, tüketimi karşılaştır", terms: "elektrik su doğalgaz sayaç enerji kwh endeks csv", url: "/ev/araclar/?arac=sayac", icon: "file" },
+    { name: "Tarif Kartı", desc: "Tarif sakla ve porsiyonu değiştir", terms: "yemek malzeme porsiyon mutfak tarif ölçü", url: "/ev/tarif/", icon: "book" },
   ] },
   { id: "plan", name: "Planlama", apps: [
     { name: "Vardiyayı Takvime Aktar", desc: "Nöbet döngünü oluştur ve takvim dosyası indir", terms: "vardiya nöbet takvim ics gündüz gece izin", url: "/plan/vardiya/", icon: "file" },
