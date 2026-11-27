@@ -1,0 +1,3 @@
+[submodule "hesapkitap"]
+	path = hesapkitap
+	url = https://github.com/dogukaska/hesapkitap.git

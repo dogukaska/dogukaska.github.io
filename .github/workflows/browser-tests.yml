@@ -28,6 +28,7 @@ jobs:
           repository: dogukaska/dogukaska.github.io
           ref: ${{ github.repository == 'dogukaska/dogukaska.github.io' && github.sha || 'main' }}
           persist-credentials: false
+          submodules: true
           path: hub
 
       - name: Değişen uygulamanın aday sürümünü al
@@ -54,6 +55,7 @@ jobs:
           cache-dependency-path: hub/package-lock.json
 
       - run: npm ci
+      - run: npm --prefix hesapkitap test
       - run: npx playwright install --with-deps chromium webkit
       - run: npm run test:browser
 
