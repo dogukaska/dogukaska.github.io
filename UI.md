@@ -5,5 +5,6 @@
 - Aynı göreve ait seçenekleri tek bir kompakt grupta tut. Dosya, çalışma alanı ve çıktı arasına gereksiz kart koyma. Sık gerekmeyen ayarları gerektiğinde açılan bir bölümde sun.
 - Dosyanın adı görünür kalsın. Uzun adlar düzeni bozmasın. Durum mesajlarını kısa tut ve ekran okuyucu için duyur.
 - Antrasit ve kırık beyaz renkler, açık ve koyu tema, kısa Türkçe metinler. 320 px genişlikte yatay taşma olmadan, klavye ve dokunmayla kullanılabilmeli.
+- Form alanları ve düğmeler birbirine değmeden veya üst üste binmeden yerleşir. Tarih ve saat alanları dahil tüm kontrolleri 320, 393 ve 430 px ekranlarda denetle. Geniş ekranda satır hizasını ve uzun etiketleri de kontrol et.
 
 Kompakt eylem grupları için [Arc UI Button Group](https://uiarc.dev/components/button-group) ve [Action Button](https://uiarc.dev/components/action-button) kaynakları incelendi. Düzen mevcut HTML ve CSS ile uygulanır.

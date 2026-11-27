@@ -1,6 +1,28 @@
 import { readFile } from "node:fs/promises";
 import { expect } from "@playwright/test";
-import { test } from "./fixtures.mjs";
+import { download, test } from "./fixtures.mjs";
+
+test("QR logosu ve QR görseli bitmap desteği olmadan açılır", async ({ page }) => {
+  await page.addInitScript(() => {
+    window.createImageBitmap = async () => { throw new Error("Bitmap açılamadı"); };
+  });
+  await page.goto("/qr/");
+  await page.locator("#text").fill("Türkçe QR örneği");
+  const logo = Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><rect x="8" y="8" width="16" height="16" fill="#2e3033"/></svg>');
+  const alerts = [];
+  page.on("dialog", async (dialog) => {
+    alerts.push(dialog.message());
+    await dialog.dismiss();
+  });
+  await page.locator("#logo-file").setInputFiles({ name: "logo.svg", mimeType: "image/svg+xml", buffer: logo });
+  await expect(page.locator("#logo-del")).toBeVisible({ timeout: 4000 });
+  expect(alerts).toEqual([]);
+  await page.locator("#logo-del").click();
+  const png = await readFile(await download(page, "#dl"));
+  await page.goto("/qr/oku/");
+  await page.locator("#file").setInputFiles({ name: "qr.png", mimeType: "image/png", buffer: png });
+  await expect(page.locator("#content")).toHaveValue("Türkçe QR örneği");
+});
 
 test("katalog ve uygulama girişleri dar ekranda açılır", async ({ page, baseURL, browserName }) => {
   const missing = [];
