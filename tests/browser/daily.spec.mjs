@@ -166,6 +166,33 @@ test("kutu araması Türkçe metni bulur ve etiket orijinal içeriği taşır", 
   await expect(page.locator("#records")).toHaveText("Eşleşen kayıt bulunamadı.");
 });
 
+test("garanti tarih alanları dar ekranda taşmaz ve geniş ekranda hizalanır", async ({ page }) => {
+  await page.goto("/ev/araclar/?arac=garanti");
+  const purchase = page.getByLabel("Alış tarihi");
+  const expires = page.getByLabel("Garanti bitişi");
+  for (const width of [320, 390, 480]) {
+    await page.setViewportSize({ width, height: 820 });
+    const [first, second] = await Promise.all([purchase.boundingBox(), expires.boundingBox()]);
+    expect(Math.max(first.x + first.width, second.x + second.width)).toBeLessThanOrEqual(width);
+    if (width <= 420) {
+      expect(first.y + first.height).toBeLessThan(second.y);
+      expect(first.x).toBe(second.x);
+      expect(first.width).toBe(second.width);
+    } else {
+      expect(first.x + first.width).toBeLessThan(second.x);
+      expect(first.y).toBe(second.y);
+    }
+  }
+  await page.getByLabel("Ürün adı").fill("Telefon");
+  await purchase.fill("2026-01-15");
+  await expires.fill("2028-01-15");
+  await page.getByRole("button", { name: "Ürünü kaydet" }).click();
+  await expect(page.locator("#records")).toContainText("Telefon");
+  await page.getByRole("button", { name: "Düzenle" }).click();
+  await expect(purchase).toHaveValue("2026-01-15");
+  await expect(expires).toHaveValue("2028-01-15");
+});
+
 test("garanti eki yenilemeden sonra ZIP ve takvim dosyasıyla alınır", async ({ page }) => {
   await page.goto("/ev/araclar/?arac=garanti");
   await page.getByLabel("Ürün adı").fill("Çamaşır makinesi");
