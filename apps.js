@@ -1,3 +1,5 @@
+import { CALCULATORS } from "./hesaplama/catalog.js?v=1";
+
 // Yeni bir bağımsız aracı ilgili kategoriye ekle. icon, icons.js içindeki simge adı.
 export const CATEGORIES = [
   { id: "not", name: "Notlar", apps: [
@@ -41,6 +43,9 @@ export const CATEGORIES = [
     { name: "Dosya Paylaşımı", desc: "100 MB’a kadar dosyayı bağlantı veya QR ile gönder", terms: "görsel resim fotoğraf pdf zip belge orijinal kalite qr link gönder", url: "/foto/paylas/", icon: "file" },
     { name: "Arşiv Açıcı", desc: "ZIP, RAR ve 7z dosyalarının içini aç", terms: "arşiv sıkıştırma çıkart unzip winrar parola", url: "/dosya/arsiv/", icon: "file" },
   ] },
+  { id: "hesaplama", name: "Hesaplama", apps: CALCULATORS.map(({ id, ...app }) => ({
+    ...app, url: "/hesaplama/?arac=" + id,
+  })) },
   { id: "ev", name: "Ev", apps: [
     { name: "Odaya Sığar mı?", desc: "Mobilya ve kapı ölçüleriyle oda yerleşimini çiz", terms: "oda planı koltuk mobilya boyut yerleşim santimetre", url: "/ev/yerlesim/", icon: "image" },
     { name: "Taşınma Kutusu Bulucu", desc: "Kutuların içini kaydet ve ara", terms: "taşınma koli oda etiket eşya", url: "/ev/araclar/?arac=kutu", icon: "file" },

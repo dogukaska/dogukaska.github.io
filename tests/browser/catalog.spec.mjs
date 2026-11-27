@@ -163,3 +163,18 @@ test("Farklı dosya türleri orijinal baytlarla paylaşılır ve ZIP olarak indi
   }, bytes);
   expect(names).toEqual(["Müşteri belgesi.pdf", "README", "README (2)"]);
 });
+
+test("Hesaplama kategorisi açılır ve gizli araç aramada bulunur", async ({ page }) => {
+  await page.goto("/");
+  const category = page.getByRole("region", { name: "Hesaplama", exact: true });
+  await expect(category.getByRole("link")).toHaveCount(6);
+  await category.getByRole("button", { name: "Diğer araçları gör" }).click();
+  await expect(category.getByRole("link")).toHaveCount(12);
+  await category.getByRole("button", { name: "Daha az göster" }).click();
+  await page.getByRole("button", { name: "Araç ara" }).click();
+  await page.getByRole("searchbox", { name: "Araç ara" }).fill("yakit");
+  await category.getByRole("link", { name: /Yakıt Maliyeti/ }).click();
+  await expect(page.getByRole("heading", { name: "Yakıt Maliyeti" })).toBeVisible();
+  await page.getByRole("link", { name: "Hesaplama araçları" }).click();
+  await expect(page.getByRole("navigation", { name: "Hesaplama araçları" }).getByRole("link")).toHaveCount(12);
+});
