@@ -96,11 +96,11 @@ h1 { margin: 0; font-size: clamp(2rem, 6vw, 3rem); font-weight: 650; line-height
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 6px 14px;
+  gap: 6px clamp(7px, 2vw, 14px);
   padding-top: 12px;
   border-top: 1px solid var(--line);
   color: var(--mute);
-  font-size: .875rem;
+  font-size: clamp(.65625rem, 3.1vw, .875rem);
 }
 .catalog-footer p { margin: 0; }
 .catalog-footer a { color: var(--ink); text-underline-offset: .2em; }
