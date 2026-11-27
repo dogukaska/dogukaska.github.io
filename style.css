@@ -86,3 +86,22 @@ h1 { margin: 0; font-size: clamp(2rem, 6vw, 3rem); font-weight: 650; line-height
   color: var(--ink); border: 1px solid var(--line); border-radius: 7px; background: var(--glass); cursor: pointer;
 }
 .category-more:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+.catalog-footer {
+  max-width: 970px;
+  margin: 0 auto;
+  padding: 0 clamp(18px, 5vw, 40px) 24px;
+}
+.catalog-footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  color: var(--mute);
+  font-size: .875rem;
+}
+.catalog-footer p { margin: 0; }
+.catalog-footer a { color: var(--ink); text-underline-offset: .2em; }
+.catalog-footer a:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
