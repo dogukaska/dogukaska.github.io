@@ -100,6 +100,7 @@ h1 { margin: 0; font-size: clamp(2rem, 6vw, 3rem); font-weight: 650; line-height
   padding-top: 12px;
   border-top: 1px solid var(--line);
   color: var(--mute);
+  font-family: Arial, "Liberation Sans", sans-serif;
   font-size: clamp(.65625rem, 3.1vw, .875rem);
 }
 .catalog-footer p { margin: 0; }
