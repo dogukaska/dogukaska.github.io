@@ -1,3 +1,6 @@
 [submodule "hesapkitap"]
 	path = hesapkitap
 	url = https://github.com/dogukaska/hesapkitap.git
+[submodule "metin-veri"]
+	path = metin-veri
+	url = https://github.com/dogukaska/metin-veri.git
