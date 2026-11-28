@@ -124,6 +124,24 @@ test("Dosya Paylaşımı ve Arşiv Açıcı katalogda açılır", async ({ page 
   await expect(page.getByText(/Her gönderide toplam 100 MB/)).toBeVisible();
 });
 
+test("yeni araçlar ilgili kategorilerde açılır", async ({ page }) => {
+  await page.goto("/");
+  for (const [name, title, href] of [
+    ["Fotoğraf", /Fotoğraf Bilgilerini Temizle/, "/foto/bilgileri-temizle/"],
+    ["Fotoğraf", /Fotoğrafları Birleştir/, "/foto/birlestir/"],
+    ["Belge ve Kitap", /PDF’yi Görsele Çevir/, "/belge/gorsele-cevir/"],
+    ["Dosya", /ZIP Oluştur/, "/dosya/zip-olustur/"],
+    ["Dosya", /CSV ↔ Excel/, "/metin-veri/excel/"],
+    ["Video ve Ses", /Video Düzenle/, "/video/duzenle/"],
+  ]) {
+    const section = page.getByRole("region", { name, exact: true });
+    const link = section.getByRole("link", { name: title });
+    if (!await link.isVisible()) await section.getByRole("button", { name: "Diğer araçları gör" }).click();
+    await expect(link).toBeVisible();
+    await expect(link).toHaveAttribute("href", href);
+  }
+});
+
 test("Farklı dosya türleri orijinal baytlarla paylaşılır ve ZIP olarak indirilebilir", async ({ page }) => {
   const id = "dK123456789";
   let packet;

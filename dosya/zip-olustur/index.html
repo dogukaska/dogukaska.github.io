@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ZIP Oluştur · Dijital Çakı</title>
+<link rel="icon" href="/icons/dijital-caki.svg">
+<link rel="stylesheet" href="/tool.css?v=20261126d">
+<link rel="stylesheet" href="/gunluk/style.css?v=1">
+<link rel="stylesheet" href="/tool-links.css?v=20261126b">
+<link rel="stylesheet" href="./style.css?v=1">
+<script src="/theme.js?v=20261126c"></script>
+<script type="module" src="./app.js?v=1"></script>
+</head>
+<body>
+<main class="tool daily zip-tool">
+<header>
+  <a class="back" href="/#dosya">Uygulamalar</a>
+  <h1>ZIP Oluştur</h1>
+  <p class="intro">Dosyalarını tek bir arşivde topla. İşlem tarayıcıda yapılır.</p>
+</header>
+<nav class="tool-links" aria-label="Dosya araçları"><a href="../arsiv/">Arşiv Açıcı</a></nav>
+<form id="zip-form" class="panel">
+  <div>
+    <label for="zip-files">Dosya ekle</label>
+    <input id="zip-files" type="file" multiple>
+  </div>
+  <ul id="zip-list" class="clean" aria-label="Arşivdeki dosyalar"></ul>
+  <p id="zip-size" class="muted"></p>
+  <div>
+    <label for="zip-name">Arşiv adı</label>
+    <input id="zip-name" name="name" maxlength="120" placeholder="dosyalar.zip" autocomplete="off">
+  </div>
+  <div class="row"><button type="submit" class="primary" id="zip-run" disabled>ZIP indir</button></div>
+  <progress id="zip-progress" max="100" value="0" aria-label="ZIP oluşturma ilerlemesi" hidden></progress>
+  <p id="zip-status" role="status"></p>
+</form>
+</main>
+</body>
+</html>
