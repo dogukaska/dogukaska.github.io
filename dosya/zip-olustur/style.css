@@ -1,0 +1,5 @@
+.zip-tool { max-width: 640px; }
+.zip-tool .line { gap: 12px; }
+.zip-tool .line span { overflow-wrap: anywhere; }
+.zip-tool .line button { flex: 0 0 auto; }
+.zip-tool progress { width: 100%; accent-color: var(--ink); }
